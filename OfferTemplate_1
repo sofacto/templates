@@ -1,0 +1,241 @@
+<apex:page standardController="sofactoapp__Offre__c" extensions="sofactoapp.OffreProcessingControllerExtension"
+    renderAs="pdf"
+    showHeader="false"
+    sidebar="false">
+
+    <!-- Styles -->
+    <apex:stylesheet value="{!URLFOR($Resource.sofactoapp__pilotResources, 'pilot/style/facture-style.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.sofactoapp__pilotResources, 'pilot/style/facture-print-style.css')}" />
+
+    <div id="wrap" style="position:relative;">
+
+        <!-- Struture principale-->
+        <table>
+            <tr>
+                <td style="width:60%"></td>
+                <td style="width:40%"></td>
+            </tr>
+            <!-- logo -->
+            <tr>
+                <td colspan="2">
+                    <apex:image id="logo" value="{!sofactoapp__Offre__c.sofactoapp__Raison_Sociale__r.sofactoapp__Logo__c}"
+                        styleClass="logo" alt="Logo" rendered="{!sofactoapp__Offre__c.sofactoapp__Raison_Sociale__r.sofactoapp__Logo__c != ''}" style="float:left"/> 
+                    <!-- If no logo, holding the space for page layout-->
+                    <apex:outputPanel rendered="{!sofactoapp__Offre__c.sofactoapp__Raison_Sociale__r.sofactoapp__Logo__c == ''}">
+                        <div
+                            style="height: 100px; width: 300px; background-color: transparent">&nbsp;</div>
+                    </apex:outputPanel> 
+                </td>
+            </tr>
+            <!-- Mentions légales -->
+            <tr>
+                <!-- Infos Raison Sociale-->
+                <td class="vtop">
+                    <apex:outputText value="{!sofactoapp__Offre__c.sofactoapp__Raison_Sociale__r.sofactoapp__Enseigne__c}" 
+                        style="text-weight:bold;text-transform:uppercase;" />
+                    <br /><apex:outputText value="{!sofactoapp__Offre__c.sofactoapp__Raison_Sociale__r.sofactoapp__Rue__c}"/> 
+                    <br /><apex:outputText value="{!sofactoapp__Offre__c.sofactoapp__Raison_Sociale__r.sofactoapp__Code_postal__c} {!sofactoapp__Offre__c.sofactoapp__Raison_Sociale__r.sofactoapp__Ville__c}" />
+                    <br /><apex:outputText value="{!sofactoapp__Offre__c.sofactoapp__Raison_Sociale__r.sofactoapp__Pays__c}" />
+                    <br />
+                    <br /><apex:outputText value="T : {!sofactoapp__Offre__c.sofactoapp__Raison_Sociale__r.sofactoapp__T_l_phone__c}" rendered="{!NOT(ISBLANK(sofactoapp__Offre__c.sofactoapp__Raison_Sociale__r.sofactoapp__T_l_phone__c))}"/>
+                    <br /><apex:outputText value="F : {!sofactoapp__Offre__c.sofactoapp__Raison_Sociale__r.sofactoapp__T_l_copie__c}" rendered="{!NOT(ISBLANK(sofactoapp__Offre__c.sofactoapp__Raison_Sociale__r.sofactoapp__T_l_copie__c))}"/>
+                </td>
+                <!-- Infos Client -->
+                <td class="vtop">
+                    <apex:outputText value="{!sofactoapp__Offre__c.sofactoapp__Compte__r.Name}" />
+                    <br />
+                   <apex:outputPanel layout="none" rendered="{!NOT(ISNULL(sofactoapp__Offre__c.sofactoapp__Contact__c))}">
+                        <br />
+                        <b>{!$Label.sofactoapp__Text_A_l_attention_de}&nbsp;</b>
+                        <apex:outputText value="{!sofactoapp__Offre__c.sofactoapp__Contact__r.Salutation} {!sofactoapp__Offre__c.sofactoapp__Contact__r.FirstName} {!sofactoapp__Offre__c.sofactoapp__Contact__r.LastName}"/>
+                        <br />
+                    </apex:outputPanel>
+                    <br /><apex:outputText value="{!sofactoapp__Offre__c.sofactoapp__Compte__r.BillingStreet}" />
+                    <br /><apex:outputText value="{!sofactoapp__Offre__c.sofactoapp__Compte__r.BillingPostalCode} {!sofactoapp__Offre__c.sofactoapp__Compte__r.BillingCity}" />
+                    <br /><apex:outputText value="{!sofactoapp__Offre__c.sofactoapp__Compte__r.BillingCountry}" />                    
+                </td>
+            </tr>
+            <!-- saut de ligne -->
+            <tr>
+                <td colspan="2">&nbsp;</td>
+            </tr>
+            <!-- Corps -->
+            <tr>
+                <!-- Dates -->
+                <td class="vtop" colspan="2">
+                    <h2><apex:outputText value="{!sofactoapp__Offre__c.Name}"/></h2>
+                    <p>
+                        <apex:outputPanel rendered="{!NOT(ISBLANK(sofactoapp__Offre__c.sofactoapp__Date_de_l_Offre__c))}" layout="none">
+                            {!$ObjectType.sofactoapp__Offre__c.Fields.sofactoapp__Date_de_l_Offre__c.Label} :&nbsp;
+                            <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+                                <apex:param value="{!sofactoapp__Offre__c.sofactoapp__Date_de_l_Offre__c}" />
+                            </apex:outputText>
+                            <br />
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!NOT(ISBLANK(sofactoapp__Offre__c.sofactoapp__Date_de_validit__c))}" layout="none">
+                            {!$ObjectType.sofactoapp__Offre__c.Fields.sofactoapp__Date_de_validit__c.Label} :&nbsp;
+                            <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+                                <apex:param value="{!sofactoapp__Offre__c.sofactoapp__Date_de_validit__c}" />
+                            </apex:outputText>
+                        </apex:outputPanel>
+                    </p>
+                </td>                
+            </tr>
+        </table>
+        <apex:variable var="colspan1" value="{!IF(sofactoapp__Offre__c.sofactoapp__Afficher_la_remise__c, '6', '5')}"/>
+        <apex:variable var="colspan2" value="{!IF(sofactoapp__Offre__c.sofactoapp__Afficher_la_remise__c, '4', '3')}"/>
+        <table>
+            <tr>
+                <td class="vtop borderOff" colspan="2">   
+                    <apex:outputPanel rendered="{!NOT(ISNULL(sofactoapp__Offre__c.sofactoapp__Objet_Offre__c))}" layout="none">
+                        <b>{!$ObjectType.sofactoapp__Offre__c.Fields.sofactoapp__Objet_Offre__c.Label} : </b><apex:outputField value="{!sofactoapp__Offre__c.sofactoapp__Objet_Offre__c}"/><br />
+                    </apex:outputPanel>              
+                    <apex:outputPanel rendered="{!NOT(ISNULL(sofactoapp__Offre__c.sofactoapp__Commentaires__c))}" layout="none">
+                        <b>{!$ObjectType.sofactoapp__Offre__c.Fields.sofactoapp__Commentaires__c.Label} : </b><apex:outputField value="{!sofactoapp__Offre__c.sofactoapp__Commentaires__c}"/>
+                    </apex:outputPanel>
+                </td>
+            </tr>
+            <tr>
+                <!-- Lignes d'offre -->
+                <td class="vtop" colspan="2">
+                    <br />
+                    <table class="borderOn">
+                        <!-- Ligne entĆŖte produits -->
+                        <tr>
+                            <th class="alignleft">{!$ObjectType.sofactoapp__Poste_Offre__c.Fields.sofactoapp__Designation__c.Label}</th>
+                            <th class="aligncenter">{!$ObjectType.sofactoapp__Poste_Offre__c.Fields.sofactoapp__Prix_Unitaire_HT__c.Label}</th>
+                            <th class="aligncenter">{!$ObjectType.sofactoapp__Poste_Offre__c.Fields.sofactoapp__Quantite__c.Label}</th>
+                            <th class="aligncenter" style="display:{!IF(sofactoapp__Offre__c.sofactoapp__Afficher_la_remise__c, '', 'none')}">{!$ObjectType.sofactoapp__Poste_Offre__c.Fields.sofactoapp__Taux_de_Remise__c.Label}</th>
+                            <th class="aligncenter">{!$ObjectType.sofactoapp__Poste_Offre__c.Fields.sofactoapp__Taux_de_TVA_list__c.Label}</th>
+                            <th class="aligncenter">{!$ObjectType.sofactoapp__Poste_Offre__c.Fields.sofactoapp__Montant_HT__c.Label}</th>
+                        </tr>
+                        <!-- Pour chaque poste de facture -->
+                        <apex:repeat value="{!orderedOfferLineItems}" var="orderedLigne" id="orderedLignes">
+                            <apex:repeat value="{!sofactoapp__Offre__c.sofactoapp__Postes_d_offre__r}"
+                                var="ligne" id="lignes">
+                                <apex:outputPanel layout="none" rendered="{!ligne.Id == orderedLigne}">
+                                <tr>
+                                    <td class="alignleft" style="width:40%">
+                                        <apex:outputField value="{!ligne.sofactoapp__Designation__c}"/>
+                                        <apex:outputpanel layout="none" rendered="{!sofactoapp__Offre__c.sofactoapp__Afficher_le_produit__c}"> 
+                                            <br /><i><apex:outputText value="{!ligne.sofactoapp__Produit__r.Description}" style="font-size:9px"/></i>
+                                        </apex:outputPanel>
+                                        <apex:outputpanel layout="none" rendered="{!sofactoapp__Offre__c.sofactoapp__Afficher_description_detaillee__c}"> 
+                                            <br /><i><apex:outputText value="{!ligne.sofactoapp__Description_detaillee__c}" style="font-size:9px"/></i>
+                                        </apex:outputPanel>
+                                    </td>
+                                    <td class="alignright">
+                                        <apex:outputField value="{!ligne.sofactoapp__Prix_Unitaire_HT__c}" rendered="{!sofactoapp__Offre__c.sofactoapp__Afficher_la_remise__c}"/>
+                                        <apex:outputField value="{!ligne.sofactoapp__Prix_Unitaire_HT_apres_remise__c}" rendered="{!NOT(sofactoapp__Offre__c.sofactoapp__Afficher_la_remise__c)}"/>
+                                    </td>
+                                    <td class="aligncenter" style="white-space:nowrap;">
+                                        <apex:outputField value="{!ligne.sofactoapp__Quantite__c}"/>
+                                    </td>
+                                    <td class="aligncenter" style="white-space:nowrap;display:{!IF(sofactoapp__Offre__c.sofactoapp__Afficher_la_remise__c, '', 'none')}">
+                                        <apex:outputField value="{!ligne.sofactoapp__Taux_de_remise__c}"/>
+                                    </td>
+                                    <td class="aligncenter" style="white-space:nowrap;">
+                                        <apex:outputField value="{!ligne.sofactoapp__Taux_de_TVA_list__c}"/>
+                                    </td>
+                                    <td class="alignright">
+                                        <apex:outputField value="{!ligne.sofactoapp__Montant_HT__c}"/>
+                                    </td>
+                                </tr>
+                                </apex:outputPanel>
+                            </apex:repeat>
+                        </apex:repeat>
+                        <!-- Saut de ligne -->
+                        <tr>
+                            <td colspan="{!colspan1}" class="borderOff">&nbsp;</td>
+                        </tr>                        
+                        <!-- Remise offre -->
+                        <tr style="display:{!IF (sofactoapp__Offre__c.sofactoapp__Montant_remise_Offre__c > 0, '', 'none')}">
+                            <th class="alignleft" colspan="{!colspan2}">{!$ObjectType.sofactoapp__Offre__c.Fields.sofactoapp__Raison_pour_remise__c.Label}</th>
+                            <th class="aligncenter">{!$ObjectType.sofactoapp__Offre__c.Fields.sofactoapp__Taux_de_remise__c.Label}</th>  
+                            <th class="aligncenter">{!$ObjectType.sofactoapp__Offre__c.Fields.sofactoapp__Montant_remise_Offre__c.Label}</th>  
+                        </tr>                                                 
+                        <tr style="display:{!IF (sofactoapp__Offre__c.sofactoapp__Montant_remise_Offre__c > 0, '', 'none')}">
+                            <td class="alignleft" colspan="{!colspan2}">
+                                <apex:outputField value="{!sofactoapp__Offre__c.sofactoapp__Raison_pour_remise__c}"/>
+                            </td>
+                            <td class="aligncenter" style="white-space:nowrap;">
+                                <apex:outputField value="{!sofactoapp__Offre__c.sofactoapp__Taux_de_remise__c}"/>
+                            </td>
+                            <td class="alignright">
+                                <apex:outputField value="{!sofactoapp__Offre__c.sofactoapp__Montant_remise_Offre__c}"/>
+                            </td>                                        
+                        </tr>
+                        <!-- Saut de ligne -->
+                        <tr>
+                            <td colspan="{!colspan1}" class="borderOff">&nbsp;</td>
+                        </tr> 
+                        <!-- Total HT -->
+                        <tr>
+                            <td class="borderOff"></td>
+                            <td colspan="{!colspan2}"><b>{!$ObjectType.sofactoapp__Offre__c.Fields.sofactoapp__Montant_HT_apres_remise__c.Label}</b></td>
+                            <td class="alignright"><apex:outputField value="{!sofactoapp__Offre__c.sofactoapp__Montant_HT_apres_remise__c}"/></td>
+                        </tr>
+                        <!-- TVA -->
+                        <tr>
+                            <td class="borderOff"></td>
+                            <td colspan="{!colspan2}"><b>{!$ObjectType.sofactoapp__Offre__c.Fields.sofactoapp__Montant_TVA_apres_remise__c.Label}</b></td>
+                            <td class="alignright"><apex:outputField value="{!sofactoapp__Offre__c.sofactoapp__Montant_TVA_apres_remise__c}"/></td>
+                        </tr>
+                        <!-- Total TTC -->
+                        <tr>
+                            <td class="borderOff"></td>
+                            <td colspan="{!colspan2}"><b>{!$ObjectType.sofactoapp__Offre__c.Fields.sofactoapp__Montant_TTC_total__c.Label}</b></td>
+                            <td class="alignright"><apex:outputField value="{!sofactoapp__Offre__c.sofactoapp__Montant_TTC_total__c}"/></td>
+                        </tr>
+                        <!-- Saut de ligne -->
+                        <tr>
+                            <td colspan="{!colspan1}" class="borderOff">&nbsp;</td>
+                        </tr>
+                        <!-- Saut de ligne -->
+                        <tr>
+                            <td colspan="{!colspan1}" class="borderOff">&nbsp;</td>
+                        </tr>
+                        <!-- Conditions particuliĆØres -->
+                        <tr>
+                            <td colspan="{!colspan1}" class="borderOff">
+                                <apex:outputField value="{!sofactoapp__Offre__c.sofactoapp__Conditions_particuli_res__c}"/>
+                            </td>
+                        </tr>
+                        <!-- Saut de ligne -->
+                        <tr>
+                            <td colspan="{!colspan1}" class="borderOff">&nbsp;</td>
+                        </tr>
+                        <!-- Conditions de l'offre -->
+                        <tr>
+                            <td colspan="{!colspan1}" class="borderOff">
+                                <apex:outputField value="{!sofactoapp__Offre__c.sofactoapp__Raison_sociale__r.sofactoapp__Conditions_de_l_Offre__c}"/>
+                            </td>
+                        </tr>
+                        <!-- Saut de ligne -->
+                        <tr>
+                            <td colspan="{!colspan1}" class="borderOff">&nbsp;</td>
+                        </tr>
+                        <!-- Signature -->
+                        <tr class="borderOff">
+                            <td class="borderOff" colspan="{!colspan2}"></td>
+                            <td class="borderOff" style="font-size: 11px;text-align:center">Autorisé par</td>
+                            <td class="borderOff" style="font-size: 11px;text-align:center">Date</td>
+                        </tr>
+                        <tr class="borderOff">
+                            <td class="borderOff" colspan="{!colspan2}"></td>
+                            <td class="borderOff" style="text-align:center;height:75px;vertical-align:bottom">.........................</td>
+                            <td class="borderOff" style="text-align:center;height:75px;vertical-align:bottom">.........................</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- Politique retard de paiement -->
+    <apex:outputPanel id="panelHeaderFooter" 
+            styleClass="footer_center  small"
+            layout="block">
+        <apex:outputText value="{!sofactoapp__Offre__c.sofactoapp__Raison_Sociale__r.sofactoapp__Mentions_l_gales__c}"/> / {!$Label.sofactoapp__Text_TVA_Label} <apex:outputText value="{!sofactoapp__Offre__c.sofactoapp__Raison_Sociale__r.sofactoapp__TVA_intra__c}"/>
+        <br /><apex:outputText value="{!sofactoapp__Offre__c.sofactoapp__Raison_Sociale__r.sofactoapp__Informations_compl_mentaires__c}"/>
+    </apex:outputPanel>
+</apex:page>
