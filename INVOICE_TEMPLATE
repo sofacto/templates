@@ -73,7 +73,7 @@
                         <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Reference__c}" rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c}"/>
                         <apex:outputText value="{!sofactoapp__Factures_Client__c.Name}" rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == false}"/>
                     </h2>
-                    <br /><apex:outputField value="{!sofactoapp__Factures_Client__c.sofactoapp__Sous_type__c} rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Sous_type__c}"/>
+                    <br /><apex:outputField value="{!sofactoapp__Factures_Client__c.sofactoapp__Sous_type__c}" rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Sous_type__c))}"/>
                     <br /><apex:outputField value="{!sofactoapp__Factures_Client__c.sofactoapp__Date_de_facture__c}" />
                 </td>
                 <td colspan="2">&nbsp;</td>
