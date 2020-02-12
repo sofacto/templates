@@ -184,7 +184,12 @@
                 <!--Date de facture/ Invoice Date -->
 
                 <td colspan="2" class="alignright" style="font-size:15px;">
-                    <apex:outputField value="{!sofactoapp__Factures_Client__c.sofactoapp__Date_de_facture__c}" />
+                   <apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c}" >
+                            <apex:outputText value="{!$Label.Sofacto_DateEmission}" />&nbsp;
+                            <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+                                <apex:param value="{!sofactoapp__Factures_Client__c.sofactoapp__Date_de_facture__c}" />
+                            </apex:outputText>
+                    </apex:outputPanel>
                 </td>
 
             </tr>
