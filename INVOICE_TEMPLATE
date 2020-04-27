@@ -256,6 +256,10 @@
                             <th class="aligncenter">
                                 {!$ObjectType.sofactoapp__Ligne_de_Facture__c.Fields.sofactoapp__Quantit__c.Label}
                             </th>
+                            <th class="borderOn aligncenter"
+                                style="display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Afficher_remise__c, '', 'none')}">
+                                <apex:outputText value="{!$ObjectType.sofactoapp__Ligne_de_Facture__c.Fields.sofactoapp__Taux_Remise__c.Label}" />
+                            </th>
                             <th class="aligncenter">
                                 {!$ObjectType.sofactoapp__Ligne_de_Facture__c.Fields.sofactoapp__Taux_de_TVA_list__c.Label}
                             </th>
@@ -303,6 +307,14 @@
                                         <td class="aligncenter">
                                             <apex:outputField value="{!ligne.sofactoapp__Quantit__c}" />
                                         </td>
+                                        <td class="aligncenter"
+                                                style="display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Afficher_remise__c, '', 'none')}">
+                                                <apex:outputPanel rendered="{!IF(ISBLANK(ligne.sofactoapp__Taux_Remise__c),'none','')}">
+                                                    <apex:outputText value="{0, number, ###.00}%">
+                                                        <apex:param value="{!ligne.sofactoapp__Taux_Remise__c}" />
+                                                    </apex:outputText>
+                                                </apex:outputPanel>
+                                            </td>
                                         <td class="aligncenter">
                                             <apex:outputField value="{!ligne.sofactoapp__Taux_de_TVA_list__c}" />
                                         </td>
@@ -325,9 +337,9 @@
                         These variables ensure that you have enough space for your discount, please customize if necessary-->
 
                         <apex:variable var="colspan1"
-                            value="{!IF(sofactoapp__Factures_Client__c.sofactoapp__Afficher_remise__c, IF(sofactoapp__Factures_Client__c.sofactoapp__Afficher_pourcentage__c, 5, 4), IF(sofactoapp__Factures_Client__c.sofactoapp__Afficher_pourcentage__c, 5, 4))}" />
+                            value="{!IF(sofactoapp__Factures_Client__c.sofactoapp__Afficher_remise__c, IF(sofactoapp__Factures_Client__c.sofactoapp__Afficher_pourcentage__c, 6, 5), IF(sofactoapp__Factures_Client__c.sofactoapp__Afficher_pourcentage__c, 5, 4))}" />
                         <apex:variable var="colspan2"
-                            value="{!IF(sofactoapp__Factures_Client__c.sofactoapp__Afficher_remise__c, IF(sofactoapp__Factures_Client__c.sofactoapp__Afficher_pourcentage__c, 2, 1), IF(sofactoapp__Factures_Client__c.sofactoapp__Afficher_pourcentage__c, 2, 1))}" />
+                            value="{!IF(sofactoapp__Factures_Client__c.sofactoapp__Afficher_remise__c, IF(sofactoapp__Factures_Client__c.sofactoapp__Afficher_pourcentage__c, 3, 2), IF(sofactoapp__Factures_Client__c.sofactoapp__Afficher_pourcentage__c, 2, 1))}" />
 
 
                         <!-- Saut de ligne / Line Break -->
