@@ -1,0 +1,121 @@
+<!-- Echéancier/ Payment Plan -->
+<apex:outputPanel rendered="{!IF(sofactoapp__Factures_Client__c.sofactoapp__Type_de_facture__c<>'Avoir', '', 'none')}">
+
+
+    <!--Entête/ Header-->
+    <table class="borderOn"
+        style="padding:0; margin:0;page-break-before:auto; page-break-inside: avoid;">
+        
+        <!--Titre Echeancier/ Payment Plan Title-->
+        <tr style="display:{!IF(numPayments > 1, '', 'none')}">
+            <td colspan="6" class="borderOn"
+                style="text-align: center; text-transform: uppercase; font-weight: bold;display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='Stripe CB', '', 'none')}">
+                <apex:outputText value="{!$Label.sofactoapp__text_paymentschedule}" />
+            </td>
+            <td colspan="5" class="borderOn"
+                style="text-align: center; text-transform: uppercase; font-weight: bold;display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='Stripe CB', 'none', '')}">
+                <apex:outputText value="{!$Label.sofactoapp__text_paymentschedule}" />
+            </td>
+        </tr>
+        <!--Titre Règlement/ Payment Title-->
+        <tr style="display:{!IF(numPayments = 1, '', 'none')}">
+            <td colspan="6" class="borderOn"
+                style="text-align: center; text-transform: uppercase; font-weight: bold;display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='Stripe CB', '', 'none')}">
+                <apex:outputText value="{!$ObjectType.sofactoapp__R_glement__c.Label}" />
+            </td>
+            <td colspan="5" class="borderOn"
+                style="text-align: center; text-transform: uppercase; font-weight: bold;display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='Stripe CB', 'none', '')}">
+                <apex:outputText value="{!$ObjectType.sofactoapp__R_glement__c.Label}" />
+            </td>
+        </tr>
+
+
+        <tr style="page-break-inside:avoid; page-break-before:auto;">
+            <!--Numéro de la ligne/ Line Number-->
+            <td width="10%" class="aligncenter borderOn">
+                N°
+            </td>
+            <!--Date de règlement/ Payment date-->
+            <td width="18%" class="aligncenter borderOn">
+                <apex:outputText
+                    value="{!$ObjectType.sofactoapp__R_glement__c.Fields.sofactoapp__Date__c.Label}" />
+            </td>
+            <!--Montant HT du règlement/ Amount before tax of the payment-->
+            <td width="18%" class="aligncenter borderOn">
+                <apex:outputText
+                    value="{!$ObjectType.sofactoapp__R_glement__c.Fields.sofactoapp__AutoAmountBeforeTax__c.Label}" />
+            </td>
+            <!--Montant TVA du règlement/ VAT Amount of the payment-->
+            <td width="18%" class="aligncenter borderOn">
+                <apex:outputText
+                    value="{!$ObjectType.sofactoapp__R_glement__c.Fields.sofactoapp__AutoVATAmount__c.Label}" />
+            </td>
+
+            <!--Montant TTC du règlement/ Amount after tax of the payment-->
+            <td width="18%" class="aligncenter borderOn">
+                <apex:outputText
+                    value="{!$ObjectType.sofactoapp__R_glement__c.Fields.sofactoapp__Montant__c.Label}" />
+            </td>
+            <!--Lien Stripe / Stripe Link-->
+            <td width="18%" class="alignleft borderOn"
+                style="display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='Stripe CB', '', 'none')}">
+                <apex:outputText
+                    value="{!$ObjectType.sofactoapp__R_glement__c.Fields.sofactoapi__clientPaymentStripeURL__c.Label}" />
+
+            </td>
+        </tr>
+        <!--Lignes d’échéancier de règlement/ Payment plan items-->
+        <apex:variable var="counter" value="{!1}" />
+
+        <apex:repeat value="{!orderedPayments}" var="orderedPaymentsLigne"
+            id="orderedPaymentsLignes">
+
+            <apex:repeat value="{!sofactoapp__Factures_Client__c.sofactoapp__R_glements__r}"
+                var="paymentLigne" id="paymentLignes">
+
+                <apex:outputPanel layout="none"
+                    rendered="{!paymentLigne.Id == orderedPaymentsLigne}">
+                    <apex:outputPanel layout="none">
+
+                        <tr style="page-break-inside:avoid; page-break-before:auto">
+                            <!--Numéro de la ligne/ Line Number-->
+                            <td width="10%" style="text-align:center;">
+                                <apex:outputText value="{!counter}" />
+                                <apex:variable var="counter" value="{!counter+ 1}" />
+                            </td>
+                            <!--Date de règlement/ Payment date-->
+                            <td width="18%" style="text-align:center;">
+                                <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+                                    <apex:param value="{!paymentLigne.sofactoapp__Date__c}" />
+                                </apex:outputText>
+                            </td>
+
+                            <!--Montant HT du règlement/ Amount before tax of the payment-->
+                            <td width="18%" style="text-align:center;">
+                            <sofactoapp:CurrencyFormat p_amount="{!paymentLigne.sofactoapp__AutoAmountBeforeTax__c}" />
+                            </td>
+
+                            <!--Montant TVA du règlement/ VAT Amount of the payment-->
+                            <td width="18%" style="text-align:center;">
+                            <sofactoapp:CurrencyFormat p_amount="{!paymentLigne.sofactoapp__AutoVATAmount__c}" />
+                            </td>
+
+                            <!--Montant TTC du règlement/ Amount after tax of the payment-->
+                            <td width="18%" style="text-align:center;">
+                            <sofactoapp:CurrencyFormat p_amount="{!paymentLigne.sofactoapp__Montant__c}" />
+                            </td>
+                            <!--Lien vers Stripe / Stripe Link -->
+                            <td width="18%"
+                                style="text-align:center;display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='Stripe CB', '', 'none')}">
+                                <apex:outputLink
+                                    value="{!paymentLigne.sofactoapi__clientPaymentStripeURL__c}"
+                                    id="theLink">{!$Label.text_lienPaiementStripe}</apex:outputLink>
+                            </td>
+                        </tr>
+                    </apex:outputPanel>
+                </apex:outputPanel>
+
+            </apex:repeat>
+        </apex:repeat>
+    </table>
+</apex:outputPanel>
