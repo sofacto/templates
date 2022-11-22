@@ -7,3 +7,9 @@ You can find more helps on our support site :
 
 Or Contact us : 
 [Sales Contact](mailto:sales@sofacto.com)
+
+ATTENTION :
+Les Templates FACT_TMP ont besoin d'une version de sofacto >= 3.233 pour fonctionner
+
+WARNING : 
+FACT_TMP Templates need sofacto version >= 3.233 to work
