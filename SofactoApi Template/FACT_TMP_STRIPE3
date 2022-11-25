@@ -985,22 +985,22 @@
                                 <!--Titre Echeancier/ Payment Plan Title-->
                                 <tr style="display:{!IF(numPayments > 1, '', 'none')}">
                                     <td colspan="6" class="borderOn"
-                                        style="text-align: center; text-transform: uppercase; font-weight: bold;display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='Stripe CB', '', 'none')}">
+                                        style="text-align: center; text-transform: uppercase; font-weight: bold;display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='Stripe', '', 'none')}">
                                         <apex:outputText value="{!$Label.sofactoapp__text_paymentschedule}" />
                                     </td>
                                     <td colspan="5" class="borderOn"
-                                        style="text-align: center; text-transform: uppercase; font-weight: bold;display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='Stripe CB', 'none', '')}">
+                                        style="text-align: center; text-transform: uppercase; font-weight: bold;display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='Stripe', 'none', '')}">
                                         <apex:outputText value="{!$Label.sofactoapp__text_paymentschedule}" />
                                     </td>
                                 </tr>
                                 <!--Titre Règlement/ Payment Title-->
                                 <tr style="display:{!IF(numPayments = 1, '', 'none')}">
                                     <td colspan="6" class="borderOn"
-                                        style="text-align: center; text-transform: uppercase; font-weight: bold;display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='Stripe CB', '', 'none')}">
+                                        style="text-align: center; text-transform: uppercase; font-weight: bold;display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='Stripe', '', 'none')}">
                                         <apex:outputText value="{!$ObjectType.sofactoapp__R_glement__c.Label}" />
                                     </td>
                                     <td colspan="5" class="borderOn"
-                                        style="text-align: center; text-transform: uppercase; font-weight: bold;display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='Stripe CB', 'none', '')}">
+                                        style="text-align: center; text-transform: uppercase; font-weight: bold;display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='Stripe', 'none', '')}">
                                         <apex:outputText value="{!$ObjectType.sofactoapp__R_glement__c.Label}" />
                                     </td>
                                 </tr>
@@ -1035,7 +1035,7 @@
 
                                     <!--Lien Stripe / Stripe Link-->
                                     <td width="18%" class="alignleft borderOn"
-                                        style="display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='Stripe CB', '', 'none')}">
+                                        style="display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='Stripe', '', 'none')}">
                                         <apex:outputText
                                             value="{!$ObjectType.sofactoapp__R_glement__c.Fields.sofactoapi__clientPaymentStripeURL__c.Label}" />
 
@@ -1098,7 +1098,7 @@
                                                 </tr>
                                                 <!--Lien vers Stripe / Stripe Link -->
                                                     <td width="18%"
-                                                        style="text-align:center;display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='Stripe CB', '', 'none')}">
+                                                        style="text-align:center;display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='Stripe', '', 'none')}">
                                                         <apex:outputLink
                                                             value="{!paymentLigne.sofactoapi__clientPaymentStripeURL__c}"
                                                             id="theLink">{!$Label.text_lienPaiementStripe}
