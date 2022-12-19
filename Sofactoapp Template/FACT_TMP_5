@@ -502,41 +502,55 @@
                             rendered="{!IF(sofactoapp__Factures_Client__c.sofactoapp__Amount_VAT__c >= 150,'','none')}">
                             <apex:outputText style="text-align:left"
                                 value="{!$Label.sofactoapp__text_intracommunitytva} : {!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__TVA_intra__c}"
-                                rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__TVA_intra__c))}" />
+                                rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__TVA_intra__c))}" /> <br />
                         </apex:outputPanel>
-                        <br />
+                       
                         <!--Lettre RCS / Ville RCS / SIREN or NIF // FRANCE ONLY-->
 
                         <!--Donnée comptable / Accounting Data -->
-                        <apex:outputPanel rendered="{!IF(AND (sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c != 'null',
-                                                                   sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Lettre_RCS__c != 'null',
-                                                                   sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__pays_facturation__c='France'),
-                                                                    '','none')}">
-
+                        <apex:outputPanel rendered="{!IF(AND (sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c != null,
+                                    sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Lettre_RCS__c != null,
+                                    sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Pays_facturation__c='France'),
+                                    '','none')}">
                             <apex:outputText
-                                value="{!$Label.Sofacto_RCS} 
-                                                                {!sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Ville_RCS__c}" />
+                            value="{!$Label.Sofacto_RCS} 
+                                                    {!sofactoapp__Factures_Client__c.sofactoapp__Ville_RCS__c}" />
                             <br />
                             <apex:outputText
-                                value="{!$Label.Sofacto_SIRENNIF} {!sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Lettre_RCS__c} 
-                                                                {!sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__SIREN_NIF__c}" />
-
+                            value="{!$Label.Text_NumberRCS} {!sofactoapp__Factures_Client__c.sofactoapp__Lettre_RCS__c} 
+                                                    {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
                         </apex:outputPanel>
 
                         <!--Compte/ Account-->
-                        <apex:outputPanel rendered="{!IF(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCountry = 'France' &&
-                                                                 (ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c) ||
-                                                                 (ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Lettre_RCS__c))),
-                                                                    '','none')}">
-
+                        <apex:outputPanel rendered="{!IF(AND(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCountry = 'France',
+                                                (ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c))),
+                                                    '','none')}">
                             <apex:outputText
-                                value="{!$Label.Sofacto_RCS} 
-                                                            {!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__Ville_RCS__c}" />
+                            value="{!$Label.Sofacto_RCS} 
+                                                {!sofactoapp__Factures_Client__c.sofactoapp__Ville_RCS__c}" />
                             <br />
                             <apex:outputText
-                                value="{!$Label.Sofacto_SIRENNIF} {!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__Lettre_RCS__c} 
-                                                            {!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__SIREN_NIF__c}" />
+                            value="{!$Label.Text_NumberRCS} {!sofactoapp__Factures_Client__c.sofactoapp__Lettre_RCS__c} 
+                                                {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
+                        </apex:outputPanel>
 
+                        <!--NIF // EXEPT FRANCE-->
+
+                        <!--Donnée comptable / Accounting Data -->
+                        <apex:outputPanel rendered="{!IF(AND (sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c != null,
+                                                    sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__SIREN_NIF__c != null,
+                                                    sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Pays_facturation__c !='France'),
+                                                    '','none')}">
+                            <apex:outputText
+                            value="{!$Label.Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
+                        </apex:outputPanel>
+
+                        <!--Compte/ Account-->
+                        <apex:outputPanel rendered="{!IF(AND(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCountry != 'France',
+                                                (ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c))),
+                                                    '','none')}">
+                            <apex:outputText
+                            value="{!$Label.Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
                         </apex:outputPanel>
                     </apex:outputPanel>
 
@@ -565,20 +579,55 @@
                             rendered="{!IF(sofactoapp__Factures_Client__c.sofactoapp__Amount_VAT__c >= 150,'','none')}">
                             <apex:outputText style="text-align:left"
                                 rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__TVA_intra__c))}"
-                                value="{!$Label.sofactoapp__text_intracommunitytva} : {!sofactoapp__Factures_Client__c.sofactoapp__ACC_TVA_intra_Emise__c}" />
+                                value="{!$Label.sofactoapp__text_intracommunitytva} : {!sofactoapp__Factures_Client__c.sofactoapp__ACC_TVA_intra_Emise__c}" /> <br />
                         </apex:outputPanel>
+                        
                         <!--Lettre RCS / Ville RCS / SIREN or NIF // FRANCE ONLY-->
-                        <br />
-                        <apex:outputPanel rendered="{!IF(OR(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__pays_facturation__c='France',
-                                                            sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCountry = 'France')
-                                                        ,'','none')}">
-                            <apex:outputText value="{!$Label.Sofacto_RCS} 
+
+                        <!--Donnée comptable / Accounting Data -->
+                        <apex:outputPanel rendered="{!IF(AND (sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c != null,
+                                    sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Lettre_RCS__c != null,
+                                    sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Pays_facturation__c='France'),
+                                    '','none')}">
+                            <apex:outputText
+                            value="{!$Label.Sofacto_RCS} 
+                                                    {!sofactoapp__Factures_Client__c.sofactoapp__Ville_RCS__c}" />
+                            <br />
+                            <apex:outputText
+                            value="{!$Label.Text_NumberRCS} {!sofactoapp__Factures_Client__c.sofactoapp__Lettre_RCS__c} 
+                                                    {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
+                        </apex:outputPanel>
+
+                        <!--Compte/ Account-->
+                        <apex:outputPanel rendered="{!IF(AND(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCountry = 'France',
+                                                (ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c))),
+                                                    '','none')}">
+                            <apex:outputText
+                            value="{!$Label.Sofacto_RCS} 
                                                 {!sofactoapp__Factures_Client__c.sofactoapp__Ville_RCS__c}" />
                             <br />
                             <apex:outputText
-                                value="{!$Label.Sofacto_SIRENNIF} 
-                                                                {!sofactoapp__Factures_Client__c.sofactoapp__Lettre_RCS__c} 
-                                                                {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
+                            value="{!$Label.Text_NumberRCS} {!sofactoapp__Factures_Client__c.sofactoapp__Lettre_RCS__c} 
+                                                {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
+                        </apex:outputPanel>
+
+                        <!--NIF // EXEPT FRANCE-->
+
+                        <!--Donnée comptable / Accounting Data -->
+                        <apex:outputPanel rendered="{!IF(AND (sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c != null,
+                                                    sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__SIREN_NIF__c != null,
+                                                    sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Pays_facturation__c !='France'),
+                                                    '','none')}">
+                            <apex:outputText
+                            value="{!$Label.Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
+                        </apex:outputPanel>
+
+                        <!--Compte/ Account-->
+                        <apex:outputPanel rendered="{!IF(AND(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCountry != 'France',
+                                                (ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c))),
+                                                    '','none')}">
+                            <apex:outputText
+                            value="{!$Label.Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
                         </apex:outputPanel>
                     </apex:outputPanel>
                 </td>
@@ -639,7 +688,7 @@
                 <td width="37%" class="vtop">
 
                     <apex:outputPanel layout="none"
-                        rendered="{!ISNULL(sofactoapp__Factures_Client__c.sofactoapp__ACC_Nom_contact_Emise__c)}">
+                        rendered="{!NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__ACC_Nom_contact_Emise__c))}">
                         <b>
                             <apex:outputText value="{!$Label.sofactoapp__text_a_l_attention_de}" />&nbsp;</b>
                         <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Contact__r.Salutation}" />
@@ -1497,11 +1546,26 @@
     <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__RS_TVA_intra_Emise__c}" rendered="false" />
     <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c}" rendered="false" />
     <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Pays_facturation__c}" rendered="false" />
+    <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Ville_RCS__c}" rendered="false" />
+    <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" rendered="false" />
+    <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Lettre_RCS__c}" rendered="false" />
     <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Afficher_Tableau_Repartition_TVA__c}"
         rendered="false" />
     <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Lettre_RCS__c}"
         rendered="false" />
+    <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__Lettre_RCS__c}"
+        rendered="false" />
+    <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Lettre_RCS__c}"
+        rendered="false" />
+    <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Ville_RCS__c}"
+        rendered="false" />
+    <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__SIREN_NIF__c}"
+        rendered="false" />
     <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Ville_RCS__c}"
+        rendered="false" />
+    <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__Ville_RCS__c}"
+        rendered="false" />
+    <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__SIREN_NIF__c}"
         rendered="false" />
     <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__APE__c}"
         rendered="false" />
@@ -1511,10 +1575,14 @@
         value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__isDisplayPaymentSchedule__c}"
         rendered="false" />
     <apex:outputText
+        value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__isDisplayAccountNumber__c}"
+        rendered="false" />
+    <apex:outputText
         value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__isDisplayAccountOwner__c}"
         rendered="false" />
     <apex:outputText
         value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__isDisplayOpportunityOwner__c}"
         rendered="false" />
     <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Montant_remise_lignes__c}" rendered="false" />
+    <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Echeancier_reglement__c}" rendered="false" />
 </apex:page>
