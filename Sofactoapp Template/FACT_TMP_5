@@ -483,6 +483,15 @@
                         <br />
                         <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.Name}" />
 
+                        <apex:outputPanel
+                                    rendered="{!NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__Contact__c))}">
+                                    <br /><i>{!$Label.sofactoapp__Text_A_l_attention_de}</i> :&nbsp;
+                                    <apex:outputText
+                                        value="{!sofactoapp__Factures_Client__c.sofactoapp__Contact__r.Salutation}" />
+                                    &nbsp;
+                                    <apex:outputText
+                                        value="{!sofactoapp__Factures_Client__c.sofactoapp__Contact__r.FirstName} {!sofactoapp__Factures_Client__c.sofactoapp__Contact__r.LastName}" />
+                        </apex:outputPanel>
                         <br />
                         <apex:outputText
                             value="{!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingStreet}" />
@@ -547,7 +556,8 @@
 
                         <!--Compte/ Account-->
                         <apex:outputPanel rendered="{!IF(AND(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCountry != 'France',
-                                                (ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c))),
+                                                    (ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c)),
+                                                    sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__SIREN_NIF__c != null),
                                                     '','none')}">
                             <apex:outputText
                             value="{!$Label.Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
@@ -561,6 +571,20 @@
                         <b>
                             <apex:outputText style="text-transform: uppercase;font-size:12px;text-align:left"
                                 value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Nom_du_compte_Emise__c}" /></b>
+                        <br />
+
+                        <apex:outputPanel style="text-align:left" layout="none"
+                                    rendered="{!NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__ACC_Nom_contact_Emise__c))}">
+
+                                    <br /><i>
+                                        <apex:outputText value="{!$Label.sofactoapp__Text_A_l_attention_de}" />&nbsp;
+                                        <apex:outputText
+                                            value="{!sofactoapp__Factures_Client__c.sofactoapp__Contact__r.Salutation}" />
+                                        &nbsp;
+                                        <apex:outputText
+                                            value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Nom_contact_Emise__c}" />
+                                    </i>
+                        </apex:outputPanel>
                         <br />
 
                         <apex:outputText style="text-align:left"
@@ -624,7 +648,8 @@
 
                         <!--Compte/ Account-->
                         <apex:outputPanel rendered="{!IF(AND(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCountry != 'France',
-                                                (ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c))),
+                                                    (ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c)),
+                                                    sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__SIREN_NIF__c != null),
                                                     '','none')}">
                             <apex:outputText
                             value="{!$Label.Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
@@ -847,7 +872,7 @@
 
                 <!--Remise ligne/ Line Item Discount-->
                 <th class="aligncenter"
-                    style="display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Montant_remise_lignes__c > 0, '', 'none')}">
+                    style="display:{!IF(AND(sofactoapp__factures_client__c.sofactoapp__Montant_remise_lignes__c > 0,sofactoapp__factures_client__c.sofactoapp__Afficher_remise__c==true), '', 'none')}">
                     <apex:outputText value="{!$Label.sofactoapp__text_remise}" />
                 </th>
 
@@ -916,7 +941,7 @@
 
                             <!--Remise ligne/ Line Item Discount-->
                             <td class="aligncenter"
-                                style="display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Montant_remise_lignes__c >0, '', 'none')}">
+                                style="display:{!IF(AND(sofactoapp__factures_client__c.sofactoapp__Montant_remise_lignes__c > 0,sofactoapp__factures_client__c.sofactoapp__Afficher_remise__c==true), '', 'none')}">
                                
                                     <apex:outputText value="{0, number, ###.00}%">
                                         <apex:param value="{!ligne.sofactoapp__Taux_Remise_2__c}" />
@@ -1542,6 +1567,7 @@
     </div>
 
     <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Afficher_pourcentage__c}" rendered="false" />
+    <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Afficher_remise__c}" rendered="false" />
     <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__RS_Code_NAF_Emise__c}" rendered="false" />
     <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__RS_TVA_intra_Emise__c}" rendered="false" />
     <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c}" rendered="false" />

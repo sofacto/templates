@@ -514,7 +514,8 @@
 
                         <!--Compte/ Account-->
                         <apex:outputPanel rendered="{!IF(AND(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCountry != 'France',
-                                                                 (ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c))),
+                                                                 (ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c)),
+                                                                 sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__SIREN_NIF__c != null),
                                                                     '','none')}">
                             <apex:outputText
                                 value="{!$Label.Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
@@ -612,7 +613,8 @@
 
                         <!--Compte/ Account-->
                         <apex:outputPanel rendered="{!IF(AND(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCountry != 'France',
-                                                    (ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c))),
+                                                        (ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c)),
+                                                        sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__SIREN_NIF__c != null),
                                                         '','none')}">
                             <apex:outputText
                             value="{!$Label.Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
@@ -972,7 +974,7 @@
 
                             <!--Remise ligne/ Line Item Discount-->
                             <td class="aligncenter borderOn"
-                                style="display:{!IF(sofactoapp__factures_client__c.sofactoapp__Montant_remise_lignes__c > 0, '', 'none')};color:gray;border-left: hidden; border-right: hidden; border-top:hidden; border-bottom:0.2px solid black;">
+                                style="display:{!IF(AND(sofactoapp__factures_client__c.sofactoapp__Montant_remise_lignes__c > 0,sofactoapp__factures_client__c.sofactoapp__Afficher_remise__c==true), '', 'none')};color:gray;border-left: hidden; border-right: hidden; border-top:hidden; border-bottom:0.2px solid black;">
                                 <apex:outputText value="{!$Label.sofactoapp__text_remise}" />
                             </td>
 
@@ -1051,7 +1053,7 @@
 
                                         <!--Remise ligne/ Line Item Discount-->
                                         <td class="aligncenter borderOn" width="10%"
-                                            style="display:{!IF(sofactoapp__factures_client__c.sofactoapp__Montant_remise_lignes__c > 0, '', 'none')};border-left: hidden; border-right: hidden; border-top:hidden; border-bottom:0.2px solid black;">
+                                            style="display:{!IF(AND(sofactoapp__factures_client__c.sofactoapp__Montant_remise_lignes__c > 0,sofactoapp__factures_client__c.sofactoapp__Afficher_remise__c==true), '', 'none')};border-left: hidden; border-right: hidden; border-top:hidden; border-bottom:0.2px solid black;">
 
                                             <apex:outputPanel
                                                 rendered="{!IF(ligne.sofactoapp__Taux_Remise_2__c!=0,'', 'none')}">
@@ -2043,6 +2045,7 @@
 
     </div>
     <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Afficher_pourcentage__c}" rendered="false" />
+    <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Afficher_remise__c}" rendered="false" />
     <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__RS_Code_NAF_Emise__c}" rendered="false" />
     <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__RS_TVA_intra_Emise__c}" rendered="false" />
     <apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c}" rendered="false" />
