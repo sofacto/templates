@@ -630,11 +630,11 @@
                                     sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Pays_facturation__c='France'),
                                     '','none')}">
                             <apex:outputText
-                            value="{!$Label.Sofacto_RCS} 
+                            value="{!$Label.sofactoapp__Sofacto_RCS} 
                                                     {!sofactoapp__Factures_Client__c.sofactoapp__Ville_RCS__c}" />
                             <br />
                             <apex:outputText
-                            value="{!$Label.Text_NumberRCS} {!sofactoapp__Factures_Client__c.sofactoapp__Lettre_RCS__c} 
+                            value="{!$Label.sofactoapp__Text_NumberRCS} {!sofactoapp__Factures_Client__c.sofactoapp__Lettre_RCS__c} 
                                                     {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
                         </apex:outputPanel>
 
@@ -643,11 +643,11 @@
                                                 (ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c))),
                                                     '','none')}">
                             <apex:outputText
-                            value="{!$Label.Sofacto_RCS} 
+                            value="{!$Label.sofactoapp__Sofacto_RCS} 
                                                 {!sofactoapp__Factures_Client__c.sofactoapp__Ville_RCS__c}" />
                             <br />
                             <apex:outputText
-                            value="{!$Label.Text_NumberRCS} {!sofactoapp__Factures_Client__c.sofactoapp__Lettre_RCS__c} 
+                            value="{!$Label.sofactoapp__Text_NumberRCS} {!sofactoapp__Factures_Client__c.sofactoapp__Lettre_RCS__c} 
                                                 {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
                         </apex:outputPanel>
 
@@ -659,7 +659,7 @@
                                                     sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Pays_facturation__c !='France'),
                                                     '','none')}">
                             <apex:outputText
-                            value="{!$Label.Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
+                            value="{!$Label.sofactoapp__Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
                         </apex:outputPanel>
 
                         <!--Compte/ Account-->
@@ -668,7 +668,7 @@
                                                     sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__SIREN_NIF__c != null),
                                                     '','none')}">
                             <apex:outputText
-                            value="{!$Label.Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
+                            value="{!$Label.sofactoapp__Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
                         </apex:outputPanel>
                     </apex:outputPanel>
 
@@ -714,11 +714,11 @@
                                     sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Pays_facturation__c='France'),
                                     '','none')}">
                             <apex:outputText
-                            value="{!$Label.Sofacto_RCS} 
+                            value="{!$Label.sofactoapp__Sofacto_RCS} 
                                                     {!sofactoapp__Factures_Client__c.sofactoapp__Ville_RCS__c}" />
                             <br />
                             <apex:outputText
-                            value="{!$Label.Text_NumberRCS} {!sofactoapp__Factures_Client__c.sofactoapp__Lettre_RCS__c} 
+                            value="{!$Label.sofactoapp__Text_NumberRCS} {!sofactoapp__Factures_Client__c.sofactoapp__Lettre_RCS__c} 
                                                     {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
                         </apex:outputPanel>
 
@@ -727,11 +727,11 @@
                                                 (ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c))),
                                                     '','none')}">
                             <apex:outputText
-                            value="{!$Label.Sofacto_RCS} 
+                            value="{!$Label.sofactoapp__Sofacto_RCS} 
                                                 {!sofactoapp__Factures_Client__c.sofactoapp__Ville_RCS__c}" />
                             <br />
                             <apex:outputText
-                            value="{!$Label.Text_NumberRCS} {!sofactoapp__Factures_Client__c.sofactoapp__Lettre_RCS__c} 
+                            value="{!$Label.sofactoapp__Text_NumberRCS} {!sofactoapp__Factures_Client__c.sofactoapp__Lettre_RCS__c} 
                                                 {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
                         </apex:outputPanel>
 
@@ -743,7 +743,7 @@
                                                     sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Pays_facturation__c !='France'),
                                                     '','none')}">
                             <apex:outputText
-                            value="{!$Label.Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
+                            value="{!$Label.sofactoapp__Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
                         </apex:outputPanel>
 
                         <!--Compte/ Account-->
@@ -752,7 +752,7 @@
                                                     sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__SIREN_NIF__c != null),
                                                     '','none')}">
                             <apex:outputText
-                            value="{!$Label.Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
+                            value="{!$Label.sofactoapp__Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}" />
                         </apex:outputPanel>
                     </apex:outputPanel>
 
