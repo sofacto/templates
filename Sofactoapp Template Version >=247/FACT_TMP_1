@@ -1,33 +1,30 @@
-<apex:page
-	standardController="Factures_Client__c"
-	extensions="FactureProcessingControllerExtension"
+<apex:page standardController="sofactoapp__Factures_Client__c"
+	extensions="sofactoapp.FactureProcessingControllerExtension"
 	renderAs="pdf"
 	showHeader="false"
 	sidebar="false"
-	language="{!Factures_Client__c.Langue__c}"
+	language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
 	action="{!getInvoicingHistoryIfBalanceInvoice}"
 >
 	<div id="wrap" style="position: relative">
 		<apex:variable value="{!1}" var="rowNum" />
-		<apex:stylesheet value="{!URLFOR($Resource.INVOICE_STYLE)}" />
+		<apex:stylesheet value="{!URLFOR($Resource.sofactoapp__INVOICE_STYLE)}" />
 
 		<!--En-tête de la facture/ Header-->
 
 		<div class="header">
 			<table>
 				<td style="width: 60%; vertical-align: bottom">
-					<apex:image
-						id="logo"
-						value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Logo__c}"
+					<apex:image id="logo"
+						value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Logo__c}"
 						styleClass="logo"
 						alt="Logo"
-						rendered="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Logo__c != ''}"
+						rendered="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Logo__c != ''}"
 						style="float: left; height: 75px"
 					/>
 
 					<!--Si pas de logo - espace pour la mise en page / If no logo - space holder for page layout-->
-					<apex:outputPanel
-						rendered="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Logo__c == ''}"
+					<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Logo__c == ''}"
 					>
 						<div
 							style="width: 300px; background-color: transparent"
@@ -40,61 +37,50 @@
 
 				<td style="width: 40%; text-transform: uppercase; color: gray">
 					<apex:outputPanel style="font-size: 20px">
-						<apex:outputField
-							value="{!Factures_Client__c.Type_de_facture__c}"
+						<apex:outputField value="{!sofactoapp__Factures_Client__c.sofactoapp__Type_de_facture__c}"
 						/>
 						&nbsp;
 					</apex:outputPanel>
 
 					<!--Brouillon/ Draft-->
-					<apex:outputPanel
-						style="font-size: 20px"
-						rendered="{!Factures_Client__c.IsSent__c == false && ISBLANK($CurrentPage.parameters.proforma)}"
+					<apex:outputPanel style="font-size: 20px"
+						rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == false && ISBLANK($CurrentPage.parameters.proforma)}"
 					>
-						<apex:outputText
-							value="({!$Label.sofactoapp__Text_ProvisionalDocument})"
+						<apex:outputText value="({!$Label.sofactoapp__Text_ProvisionalDocument})"
 						/>&nbsp;
 					</apex:outputPanel>
 
 					<!--Proforma-->
-					<apex:outputPanel
-						style="font-size: 20px"
-						rendered="{!Factures_Client__c.IsSent__c == false && NOT(ISBLANK($CurrentPage.parameters.proforma))}"
+					<apex:outputPanel style="font-size: 20px"
+						rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == false && NOT(ISBLANK($CurrentPage.parameters.proforma))}"
 					>
-						<apex:outputText
-							value="({!$Label.sofactoapp__Text_ProvisionalDocument})"
+						<apex:outputText value="({!$Label.sofactoapp__Text_ProvisionalDocument})"
 						/>&nbsp;
 					</apex:outputPanel>
 
 					<!--Facture émise/ Issued Invoice-->
-					<apex:outputPanel
-						style="font-size: 20px"
-						rendered="{!Factures_Client__c.IsSent__c}"
+					<apex:outputPanel style="font-size: 20px"
+						rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c}"
 					>
-						<apex:outputText
-							value="{!Factures_Client__c.Reference__c}"
+						<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Reference__c}"
 						/>&nbsp;
 					</apex:outputPanel>
 
 					<!--Facture brouillon/ Draft Invoice-->
-					<apex:outputPanel
-						style="font-size: 20px"
-						rendered="{!Factures_Client__c.IsSent__c == false}"
+					<apex:outputPanel style="font-size: 20px"
+						rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == false}"
 					>
-						<apex:outputText
-							value="{!Factures_Client__c.Name}"
+						<apex:outputText value="{!sofactoapp__Factures_Client__c.Name}"
 						/>&nbsp;
 					</apex:outputPanel>
 
 					<!--Sous-type/ Subtype-->
-					<apex:outputPanel
-						style="font-size: 15px"
-						rendered="{!NOT(ISBLANK(Factures_Client__c.Sous_type__c))}"
+					<apex:outputPanel style="font-size: 15px"
+						rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Sous_type__c))}"
 					>
 						<br />
 						<i>
-							<apex:outputField
-								value="{!Factures_Client__c.Sous_type__c}"
+							<apex:outputField value="{!sofactoapp__Factures_Client__c.sofactoapp__Sous_type__c}"
 							/>
 						</i>
 						<br />
@@ -102,15 +88,12 @@
 					<br />
 
 					<!--Numéro de la facture initiale (si type d'avoir)/ Initial invoice number (if credit note)-->
-					<apex:outputPanel
-						layout="none"
-						rendered="{!NOT(ISNULL(Factures_Client__c.Facture_initiale__c))}"
+					<apex:outputPanel layout="none"
+						rendered="{!NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__Facture_initiale__c))}"
 					>
-						<apex:outputText
-							value=" {!$ObjectType.Factures_Client__c.Fields.Facture_initiale__c.Label} : "
+						<apex:outputText value=" {!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__Facture_initiale__c.Label} : "
 						/>
-						<apex:outputText
-							value="{!Factures_Client__c.sofactoapp__Facture_initiale__r.Reference__c}"
+						<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Facture_initiale__r.sofactoapp__Reference__c}"
 						/>
 						<br />
 						<br />
@@ -120,8 +103,7 @@
 		</div>
 		<!-- Pied de page/ Footer -->
 		<div class="footer">
-			<apex:outputPanel
-				id="panelHeaderFooter"
+			<apex:outputPanel id="panelHeaderFooter"
 				styleClass="footer_center small"
 				style="font-size: 9px"
 				layout="block"
@@ -131,83 +113,69 @@
 						<!--Coordonnées de votre entreprise/ Your company's adress-->
 						<td style="width: 20%" class="vtop">
 							<!--Brouillon - Proforma/ Draft - Proforma-->
-							<apex:outputPanel
-								rendered="{!Factures_Client__c.IsSent__c == false}"
+							<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == false}"
 							>
-								<apex:outputText
-									value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Enseigne__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Enseigne__c}"
 									style="
 										text-transform: uppercase;
 										color: #696969;
 										font-size: 10px;
 									"
-									rendered="{!NOT(ISBLANK(Factures_Client__c.sofactoapp__emetteur_facture__r.Enseigne__c))}"
+									rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Enseigne__c))}"
 								/>
-								<apex:outputText
-									value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Name}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.Name}"
 									style="
 										text-transform: uppercase;
 										color: #696969;
 										font-size: 10px;
 									"
-									rendered="{!ISBLANK(Factures_Client__c.sofactoapp__emetteur_facture__r.Enseigne__c)}"
+									rendered="{!ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Enseigne__c)}"
 								/>
 								<br />
-								<apex:outputText
-									value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Rue__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Rue__c}"
 								/>
 								<br />
-								<apex:outputText
-									value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Code_postal__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Code_postal__c}"
 								/>
 								&nbsp;
-								<apex:outputText
-									value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Ville__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Ville__c}"
 								/>
 								&nbsp;•&nbsp;
-								<apex:outputText
-									value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Liste_pays__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Liste_pays__c}"
 								/>
 							</apex:outputPanel>
 
 							<!--Original/ Duplicata-->
-							<apex:outputPanel
-								rendered="{!Factures_Client__c.IsSent__c == true}"
+							<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == true}"
 							>
-								<apex:outputText
-									value="{!Factures_Client__c.RS_Emise__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__RS_Emise__c}"
 									style="
 										text-transform: uppercase;
 										color: #696969;
 										font-size: 10px;
 									"
-									rendered="{!NOT(ISBLANK(Factures_Client__c.RS_Emise__c))}"
+									rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__RS_Emise__c))}"
 								/>
-								<apex:outputText
-									value="{!Factures_Client__c.RS_Emise__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__RS_Emise__c}"
 									style="
 										text-transform: uppercase;
 										color: #696969;
 										font-size: 10px;
 									"
-									rendered="{!ISBLANK(Factures_Client__c.RS_Emise__c)}"
+									rendered="{!ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__RS_Emise__c)}"
 								/>
 
 								<br />
-								<apex:outputText
-									value="{!Factures_Client__c.RS_Rue_Emise__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__RS_Rue_Emise__c}"
 								/>
 								<br />
-								<apex:outputText
-									value="{!Factures_Client__c.RS_Code_postal_Emise__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__RS_Code_postal_Emise__c}"
 								/>
 								&nbsp;
-								<apex:outputText
-									value="{!Factures_Client__c.RS_Ville_Emise__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__RS_Ville_Emise__c}"
 								/>
 								&nbsp;•&nbsp;
-								<apex:outputText
-									value="{!Factures_Client__c.RS_Pays_Emise__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__RS_Pays_Emise__c}"
 								/>
 							</apex:outputPanel>
 							<br />
@@ -225,48 +193,38 @@
 							"
 						>
 							<!--Brouillon - Proforma/ Draft - Proforma-->
-							<apex:outputPanel
-								rendered="{!Factures_Client__c.IsSent__c == false}"
+							<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == false}"
 							>
-								<apex:outputText
-									value="{!$Label.sofactoapp__Text_Telephone} : {!Factures_Client__c.sofactoapp__emetteur_facture__r.T_l_phone__c}"
-									rendered="{!NOT(ISBLANK(Factures_Client__c.sofactoapp__emetteur_facture__r.T_l_phone__c))}"
+								<apex:outputText value="{!$Label.sofactoapp__Text_Telephone} : {!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__T_l_phone__c}"
+									rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__T_l_phone__c))}"
 								/>
 								<br />
-								<apex:outputText
-									value="{!$Label.sofactoapp__Text_Fax} : {!Factures_Client__c.sofactoapp__emetteur_facture__r.T_l_copie__c}"
-									rendered="{!NOT(ISBLANK(Factures_Client__c.sofactoapp__emetteur_facture__r.T_l_copie__c))}"
+								<apex:outputText value="{!$Label.sofactoapp__Text_Fax} : {!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__T_l_copie__c}"
+									rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__T_l_copie__c))}"
 								/>
 								<br />
-								<apex:outputText
-									value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Email__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Email__c}"
 								/>
 								<br />
-								<apex:outputText
-									value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.website__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__website__c}"
 								/>
 								<br />
 							</apex:outputPanel>
 							<!--Original/ Duplicata-->
-							<apex:outputPanel
-								rendered="{!Factures_Client__c.IsSent__c == true}"
+							<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == true}"
 							>
-								<apex:outputText
-									value="{!$Label.sofactoapp__Text_Telephone} : {!Factures_Client__c.sofactoapp__emetteur_facture__r.T_l_phone__c}"
-									rendered="{!NOT(ISBLANK(Factures_Client__c.sofactoapp__emetteur_facture__r.T_l_phone__c))}"
+								<apex:outputText value="{!$Label.sofactoapp__Text_Telephone} : {!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__T_l_phone__c}"
+									rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__T_l_phone__c))}"
 								/>
 								<br />
-								<apex:outputText
-									value="{!$Label.sofactoapp__Text_Fax} : {!Factures_Client__c.sofactoapp__emetteur_facture__r.T_l_copie__c}"
-									rendered="{!NOT(ISBLANK(Factures_Client__c.sofactoapp__emetteur_facture__r.T_l_copie__c))}"
+								<apex:outputText value="{!$Label.sofactoapp__Text_Fax} : {!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__T_l_copie__c}"
+									rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__T_l_copie__c))}"
 								/>
 								<br />
-								<apex:outputText
-									value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Email__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Email__c}"
 								/>
 								<br />
-								<apex:outputText
-									value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.website__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__website__c}"
 								/>
 								<br />
 							</apex:outputPanel>
@@ -284,24 +242,19 @@
 							"
 						>
 							<!--Brouillon - Proforma/ Draft - Proforma-->
-							<apex:outputPanel
-								rendered="{!Factures_Client__c.IsSent__c == false}"
+							<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == false}"
 							>
-								<apex:outputText
-									value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Forme_juridique__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Forme_juridique__c}"
 								/>
 								&nbsp;
-								<apex:outputPanel
-									rendered="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Forme_juridique__c<>'Association'}"
+								<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Forme_juridique__c<>'Association'}"
 								>
-									<apex:outputText
-										value="{!$Label.sofactoapp__Text_CapitalOf}"
+									<apex:outputText value="{!$Label.sofactoapp__Text_CapitalOf}"
 									/>&nbsp;
-									<c:CurrencyFormat
-										p_scale="2"
+									<c:CurrencyFormat p_scale="2"
 										p_stripTrailingZeros="false"
-										p_language="{!Factures_Client__c.Langue__c}"
-										p_amount="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Capital_social__c}"
+										p_language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
+										p_amount="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Capital_social__c}"
 										p_currency="{!IF(hasMultiCurrency = true, invoiceCurrency, '')}"
 									/>
 									&nbsp;
@@ -309,47 +262,37 @@
 								<br />
 
 								<!--Seulement si pays RS = France/ Only if country of corporate name = France-->
-								<apex:outputPanel
-									rendered="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Liste_pays__c='France'}"
+								<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Liste_pays__c='France'}"
 								>
-									<apex:outputText
-										value="{!$Label.sofactoapp__Text_registeredAt} {!Factures_Client__c.sofactoapp__emetteur_facture__r.Ville_RCS__c}"
+									<apex:outputText value="{!$Label.sofactoapp__Text_registeredAt} {!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Ville_RCS__c}"
 									/>
 									<br />
-									<apex:outputText
-										value="{!$Label.sofactoapp__Text_NumberRCS} {!Factures_Client__c.sofactoapp__emetteur_facture__r.Lettre_RCS__c} {!Factures_Client__c.sofactoapp__emetteur_facture__r.SIREN__c}"
+									<apex:outputText value="{!$Label.sofactoapp__Text_NumberRCS} {!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Lettre_RCS__c} {!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__SIREN__c}"
 									/>
 
 									<br />
-									<apex:outputText
-										value="{!$Label.sofactoapp__Text_APE} : 
-										 {!Factures_Client__c.sofactoapp__emetteur_facture__r.APE__c}"
+									<apex:outputText value="{!$Label.sofactoapp__Text_APE} : 
+										 {!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__APE__c}"
 									/>
 								</apex:outputPanel>
 
-								<apex:outputPanel
-									rendered="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Forme_juridique__c<>'Association'}"
+								<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Forme_juridique__c<>'Association'}"
 								>
 									&nbsp;•&nbsp;
-									<apex:outputText
-										rendered="{!NOT(ISBLANK(Factures_Client__c.sofactoapp__emetteur_facture__r.TVA_intra__c))}"
-										value="{!$Label.sofactoapp__Text_IntraCommunityTVA} {!Factures_Client__c.sofactoapp__emetteur_facture__r.TVA_intra__c}"
+									<apex:outputText rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__TVA_intra__c))}"
+										value="{!$Label.sofactoapp__Text_IntraCommunityTVA} {!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__TVA_intra__c}"
 									/>
 								</apex:outputPanel>
 								<br />
-								<apex:outputPanel
-									rendered="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Exon_ration_Vat__c<>'null'}"
+								<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Exon_ration_Vat__c<>'null'}"
 								>
-									<apex:outputText
-										rendered="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Exon_ration_Vat__c='Franchise en base de TVA'}"
+									<apex:outputText rendered="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Exon_ration_Vat__c='Franchise en base de TVA'}"
 										value="{!$Label.sofactoapp__Text_corporate_Exo_Vat_Franchise}"
 									/>
-									<apex:outputText
-										rendered="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Exon_ration_Vat__c='Autoliquidation de TVA'}"
+									<apex:outputText rendered="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Exon_ration_Vat__c='Autoliquidation de TVA'}"
 										value="{!$Label.sofactoapp__Text_Exo_Vat_Autoliquidation}"
 									/>
-									<apex:outputText
-										rendered="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Exon_ration_Vat__c='Autofacturation'}"
+									<apex:outputText rendered="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Exon_ration_Vat__c='Autofacturation'}"
 										value="{!$Label.sofactoapp__Text_corporate_Exo_Vat_Autofacturation}"
 									/>
 									<br />
@@ -357,24 +300,19 @@
 							</apex:outputPanel>
 
 							<!--Original/ Duplicata-->
-							<apex:outputPanel
-								rendered="{!Factures_Client__c.IsSent__c == true}"
+							<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == true}"
 							>
-								<apex:outputText
-									value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Forme_juridique__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Forme_juridique__c}"
 								/>
-								<apex:outputPanel
-									rendered="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Forme_juridique__c<>'Association'}"
+								<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Forme_juridique__c<>'Association'}"
 								>
 									&nbsp;
-									<apex:outputText
-										value="{!$Label.sofactoapp__Text_CapitalOf}"
+									<apex:outputText value="{!$Label.sofactoapp__Text_CapitalOf}"
 									/>&nbsp;
-									<c:CurrencyFormat
-										p_scale="2"
+									<c:CurrencyFormat p_scale="2"
 										p_stripTrailingZeros="false"
-										p_language="{!Factures_Client__c.Langue__c}"
-										p_amount="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Capital_social__c}"
+										p_language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
+										p_amount="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Capital_social__c}"
 										p_currency="{!IF(hasMultiCurrency = true, invoiceCurrency, '')}"
 									/>
 									&nbsp;
@@ -382,46 +320,36 @@
 
 								<br />
 								<!--Seulement si pays RS = France/ Only if country of corporate name = France-->
-								<apex:outputPanel
-									rendered="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Liste_pays__c='France'}"
+								<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Liste_pays__c='France'}"
 								>
-									<apex:outputText
-										value="{!$Label.sofactoapp__Text_registeredAt} {!Factures_Client__c.sofactoapp__emetteur_facture__r.Ville_RCS__c}"
+									<apex:outputText value="{!$Label.sofactoapp__Text_registeredAt} {!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Ville_RCS__c}"
 									/>
 									<br />
-									<apex:outputText
-										value="{!$Label.sofactoapp__Text_NumberRCS} {!Factures_Client__c.sofactoapp__emetteur_facture__r.Lettre_RCS__c} {!Factures_Client__c.sofactoapp__emetteur_facture__r.SIREN__c}"
+									<apex:outputText value="{!$Label.sofactoapp__Text_NumberRCS} {!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Lettre_RCS__c} {!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__SIREN__c}"
 									/>
 
 									<br />
-									<apex:outputText
-										value="{!$Label.sofactoapp__Text_APE} : 
-											{!Factures_Client__c.RS_Code_NAF_Emise__c}"
+									<apex:outputText value="{!$Label.sofactoapp__Text_APE} : 
+											{!sofactoapp__Factures_Client__c.sofactoapp__RS_Code_NAF_Emise__c}"
 									/>
 								</apex:outputPanel>
-								<apex:outputPanel
-									rendered="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Forme_juridique__c<>'Association'}"
+								<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Forme_juridique__c<>'Association'}"
 								>
 									&nbsp;•&nbsp;
-									<apex:outputText
-										rendered="{!NOT(ISBLANK(Factures_Client__c.RS_TVA_intra_Emise__c))}"
-										value="{!$Label.sofactoapp__Text_IntraCommunityTVA} : {!Factures_Client__c.RS_TVA_intra_Emise__c}"
+									<apex:outputText rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__RS_TVA_intra_Emise__c))}"
+										value="{!$Label.sofactoapp__Text_IntraCommunityTVA} : {!sofactoapp__Factures_Client__c.sofactoapp__RS_TVA_intra_Emise__c}"
 									/>
 								</apex:outputPanel>
 								<br />
-								<apex:outputPanel
-									rendered="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Exon_ration_Vat__c<>'null'}"
+								<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Exon_ration_Vat__c<>'null'}"
 								>
-									<apex:outputText
-										rendered="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Exon_ration_Vat__c='Franchise en base de TVA'}"
+									<apex:outputText rendered="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Exon_ration_Vat__c='Franchise en base de TVA'}"
 										value="{!$Label.sofactoapp__Text_corporate_Exo_Vat_Franchise}"
 									/>
-									<apex:outputText
-										rendered="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Exon_ration_Vat__c='Autoliquidation de TVA'}"
+									<apex:outputText rendered="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Exon_ration_Vat__c='Autoliquidation de TVA'}"
 										value="{!$Label.sofactoapp__Text_Exo_Vat_Autoliquidation}"
 									/>
-									<apex:outputText
-										rendered="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Exon_ration_Vat__c='Autofacturation'}"
+									<apex:outputText rendered="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Exon_ration_Vat__c='Autofacturation'}"
 										value="{!$Label.sofactoapp__Text_corporate_Exo_Vat_Autofacturation}"
 									/>
 									<br />
@@ -430,8 +358,7 @@
 							<br />
 						</td>
 						<td style="width: 10%" class="alignright">
-							<apex:outputText
-								value="{!$Label.sofactoapp__Text_PageNumber}"
+							<apex:outputText value="{!$Label.sofactoapp__Text_PageNumber}"
 							/>&nbsp; <span class="pagenumber" />/
 							<span class="pagecount" />
 						</td>
@@ -464,8 +391,7 @@
 					"
 				>
 					<!--Adresse facturation/ Billing address-->
-					<apex:outputText
-						value="{!$Label.sofactoapp__Text_Adresse_facturation}"
+					<apex:outputText value="{!$Label.sofactoapp__Text_Adresse_facturation}"
 						style="font-size: 9px; text-align: left; color: gray"
 					/>
 				</td>
@@ -481,24 +407,20 @@
 
 					<!--TAMPON DUPLICATA/ STAMP : DUPLICATE-->
 					<!--FR-->
-					<apex:outputPanel
-						rendered="{!AND(Factures_Client__c.Duplicata__c,OR(Factures_Client__c.Langue__c=='fr_FR',ISBLANK(Factures_Client__c.Langue__c)))}"
+					<apex:outputPanel rendered="{!AND(sofactoapp__Factures_Client__c.sofactoapp__Duplicata__c,OR(sofactoapp__Factures_Client__c.sofactoapp__Langue__c=='fr_FR',ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Langue__c)))}"
 					>
-						<apex:image
-							id="stampDuplicata"
+						<apex:image id="stampDuplicata"
 							alt="Duplicata"
-							value="{!$Resource.Tampon_Duplicata}"
+							value="{!$Resource.sofactoapp__Tampon_Duplicata}"
 							style="width: 100px"
 						/>
 					</apex:outputPanel>
 					<!--EN-->
-					<apex:outputPanel
-						rendered="{!AND(Factures_Client__c.Duplicata__c,Factures_Client__c.Langue__c=='en_US')}"
+					<apex:outputPanel rendered="{!AND(sofactoapp__Factures_Client__c.sofactoapp__Duplicata__c,sofactoapp__Factures_Client__c.sofactoapp__Langue__c=='en_US')}"
 					>
-						<apex:image
-							id="stampDuplicataEN"
+						<apex:image id="stampDuplicataEN"
 							alt="Duplicata"
-							value="{!$Resource.Tampon_Duplicata_EN}"
+							value="{!$Resource.sofactoapp__Tampon_Duplicata_EN}"
 							style="width: 100px"
 						/>
 					</apex:outputPanel>
@@ -506,43 +428,36 @@
 					<!--TAMPON BROUILLON/ STAMP : DRAFT-->
 					<!--FR-->
 
-					<apex:outputPanel
-						rendered="{!AND(Factures_Client__c.IsSent__c == false, ISBLANK($CurrentPage.parameters.proforma),OR(Factures_Client__c.Langue__c=='fr_FR',ISBLANK(Factures_Client__c.Langue__c)))}"
+					<apex:outputPanel rendered="{!AND(sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == false, ISBLANK($CurrentPage.parameters.proforma),OR(sofactoapp__Factures_Client__c.sofactoapp__Langue__c=='fr_FR',ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Langue__c)))}"
 					>
-						<apex:image
-							id="stampBrouillon"
+						<apex:image id="stampBrouillon"
 							alt="Brouillon"
-							value="{!$Resource.Tampon_Brouillon}"
+							value="{!$Resource.sofactoapp__Tampon_Brouillon}"
 							style="width: 100px"
 						/>
 					</apex:outputPanel>
 					<!--EN-->
-					<apex:outputPanel
-						rendered="{!AND(Factures_Client__c.IsSent__c == false, ISBLANK($CurrentPage.parameters.proforma),Factures_Client__c.Langue__c=='en_US')}"
+					<apex:outputPanel rendered="{!AND(sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == false, ISBLANK($CurrentPage.parameters.proforma),sofactoapp__Factures_Client__c.sofactoapp__Langue__c=='en_US')}"
 					>
-						<apex:image
-							id="stampBrouillonEN"
+						<apex:image id="stampBrouillonEN"
 							alt="Brouillon"
-							value="{!$Resource.Tampon_Brouillon_EN}"
+							value="{!$Resource.sofactoapp__Tampon_Brouillon_EN}"
 							style="width: 100px"
 						/>
 					</apex:outputPanel>
 
 					<!--TAMPON Proforma/ STAMP : Proforma-->
-					<apex:outputPanel
-						rendered="{!Factures_Client__c.IsSent__c == false && NOT(ISBLANK($CurrentPage.parameters.proforma))}"
+					<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == false && NOT(ISBLANK($CurrentPage.parameters.proforma))}"
 					>
-						<apex:image
-							id="stampProforma"
+						<apex:image id="stampProforma"
 							alt="Proforma"
-							value="{!$Resource.Tampon_Proforma}"
+							value="{!$Resource.sofactoapp__Tampon_Proforma}"
 							style="width: 100px"
 						/>
 					</apex:outputPanel>
 
 					<!--Horodatage/ Timestamp-->
-					<apex:outputPanel
-						style="
+					<apex:outputPanel style="
 							width: 50%;
 							vertical-align: top;
 							font-size: 9px;
@@ -553,52 +468,44 @@
 							<apex:outputText value="Numéro de réimpression : 1"
 								rendered="{!factures_client__c.Nombre_Duplicata__c > 0}" />
 						</apex:outputPanel-->
-						<!--apex:outputPanel rendered="{!Factures_Client__c.IsSent__c == false && ISBLANK($CurrentPage.parameters.proforma)}">
+						<!--apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == false && ISBLANK($CurrentPage.parameters.proforma)}">
 							<apex:outputText value="Numéro de réimpression : {!factures_client__c.Nombre_Brouillon__c}"
 								rendered="{!factures_client__c.Nombre_Brouillon__c > 0}" />
 						</apex:outputPanel-->
-						<!--apex:outputPanel rendered="{!Factures_Client__c.IsSent__c == false && NOT(ISBLANK($CurrentPage.parameters.proforma))}">
+						<!--apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == false && NOT(ISBLANK($CurrentPage.parameters.proforma))}">
 							<apex:outputText value="Numéro de réimpression : {!factures_client__c.Nombre_Proforma__c}"
 								rendered="{!factures_client__c.Nombre_Proforma__c > 0}" />
 						</apex:outputPanel-->
 
 						<!--Horodatage Proforma/ Timestamp Draft-->
-						<apex:outputPanel
-							rendered="{!Factures_Client__c.IsSent__c == false && NOT(ISBLANK($CurrentPage.parameters.proforma))}"
+						<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == false && NOT(ISBLANK($CurrentPage.parameters.proforma))}"
 						>
 							<br />
-							<apex:outputText
-								value="{!$Label.sofactoapp__Text_Timestamp} : {!NOW()}"
+							<apex:outputText value="{!$Label.sofactoapp__Text_Timestamp} : {!NOW()}"
 							/>
 						</apex:outputPanel>
 
 						<!--Horodatage Brouillon/ Timestamp Draft -->
-						<apex:outputPanel
-							rendered="{!Factures_Client__c.IsSent__c == false && ISBLANK($CurrentPage.parameters.proforma)}"
+						<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == false && ISBLANK($CurrentPage.parameters.proforma)}"
 						>
 							<br />
-							<apex:outputText
-								value="{!$Label.sofactoapp__Text_Timestamp} : {!NOW()}"
+							<apex:outputText value="{!$Label.sofactoapp__Text_Timestamp} : {!NOW()}"
 							/>
 						</apex:outputPanel>
 
 						<!--Horodatage Duplicata / Timestamp Duplicate-->
-						<apex:outputPanel
-							rendered="{!Factures_Client__c.Duplicata__c}"
+						<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__Duplicata__c}"
 						>
 							<br />
-							<apex:outputText
-								value="{!$Label.sofactoapp__Text_Timestamp} : {!NOW()}"
+							<apex:outputText value="{!$Label.sofactoapp__Text_Timestamp} : {!NOW()}"
 							/>
 						</apex:outputPanel>
 
 						<!--Horodatage Original / Timestamp Original-->
-						<apex:outputPanel
-							rendered="{!Factures_Client__c.IsSent__c == true && Factures_Client__c.Duplicata__c==false}"
+						<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == true && sofactoapp__Factures_Client__c.sofactoapp__Duplicata__c==false}"
 						>
 							<br />
-							<apex:outputText
-								value="{!$Label.sofactoapp__Text_Timestamp} : {!Factures_Client__c.issued_Timestamp__c}"
+							<apex:outputText value="{!$Label.sofactoapp__Text_Timestamp} : {!sofactoapp__Factures_Client__c.sofactoapp__issued_Timestamp__c}"
 							/>
 						</apex:outputPanel>
 					</apex:outputPanel>
@@ -610,258 +517,216 @@
 
 				<td style="width: 60%">
 					<!--Brouillon ou Proforma/ Draft or Proforma-->
-					<apex:outputPanel
-						rendered="{!Factures_Client__c.IsSent__c == false}"
+					<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == false}"
 					>
 						<b>
-							<apex:outputText
-								style="
+							<apex:outputText style="
 									text-transform: uppercase;
 									font-size: 12px;
 									text-align: left;
 								"
-								value="{!Factures_Client__c.sofactoapp__Compte__r.Name}"
+								value="{!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.Name}"
 							/>
 						</b>
 						<br />
 
 						<!--Contact client/ Customer's contact-->
-						<apex:outputPanel
-							rendered="{!NOT(ISNULL(Factures_Client__c.Contact__c))}"
+						<apex:outputPanel rendered="{!NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__Contact__c))}"
 						>
 							<i>
-								<apex:outputText
-									value="{!$Label.sofactoapp__Text_A_l_attention_de}"
+								<apex:outputText value="{!$Label.sofactoapp__Text_A_l_attention_de}"
 								/>&nbsp;:&nbsp;
-								<apex:outputText
-									value="{!Factures_Client__c.sofactoapp__Contact__r.Salutation}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Contact__r.Salutation}"
 								/>&nbsp;
-								<apex:outputText
-									value="{!Factures_Client__c.sofactoapp__Contact__r.FirstName} {!Factures_Client__c.sofactoapp__Contact__r.LastName}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Contact__r.FirstName} {!sofactoapp__Factures_Client__c.sofactoapp__Contact__r.LastName}"
 								/>
 							</i>
 							<br />
 						</apex:outputPanel>
-						<apex:outputText
-							style="text-align: left"
-							value="{!Factures_Client__c.sofactoapp__Compte__r.BillingStreet}"
+						<apex:outputText style="text-align: left"
+							value="{!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingStreet}"
 						/>
 						<br />
-						<apex:outputText
-							style="text-align: left"
-							value="{!Factures_Client__c.sofactoapp__Compte__r.BillingPostalCode} {!Factures_Client__c.sofactoapp__Compte__r.BillingCity}"
+						<apex:outputText style="text-align: left"
+							value="{!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingPostalCode} {!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCity}"
 						/>
 						<br />
-						<apex:outputText
-							style="text-align: left"
-							value="{!Factures_Client__c.sofactoapp__Compte__r.BillingCountry}"
+						<apex:outputText style="text-align: left"
+							value="{!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCountry}"
 						/>
 						<br />
 						<br />
 
 						<!--TVA intracommunautaire du client/ Customers VAT ID (FR)-->
-						<apex:outputPanel
-							rendered="{!IF(Factures_Client__c.Amount_VAT__c >= 150,'','none')}"
+						<apex:outputPanel rendered="{!IF(sofactoapp__Factures_Client__c.sofactoapp__Amount_VAT__c >= 150,'','none')}"
 						>
 							<br />
-							<apex:outputText
-								style="text-align: left"
-								value="{!$Label.sofactoapp__Text_IntraCommunityTVA} : {!Factures_Client__c.sofactoapp__Compte__r.TVA_intra__c}"
-								rendered="{!NOT(ISBLANK(Factures_Client__c.sofactoapp__Compte__r.TVA_intra__c))}"
+							<apex:outputText style="text-align: left"
+								value="{!$Label.sofactoapp__Text_IntraCommunityTVA} : {!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__TVA_intra__c}"
+								rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__TVA_intra__c))}"
 							/><br />
 						</apex:outputPanel>
 
 						<!--Lettre RCS / Ville RCS / SIREN or NIF // FRANCE ONLY-->
 
 						<!--Donnée comptable / Accounting Data -->
-						<apex:outputPanel
-							rendered="{!IF(AND (sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c != null,
+						<apex:outputPanel rendered="{!IF(AND (sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c != null,
 																   sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Lettre_RCS__c != null,
 																   sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Pays_facturation__c='France'),
 																	'','none')}"
 						>
-							<apex:outputText
-								value="{!$Label.Sofacto_RCS} 
-																{!Factures_Client__c.Ville_RCS__c}"
+							<apex:outputText value="{!$Label.Sofacto_RCS} 
+																{!sofactoapp__Factures_Client__c.sofactoapp__Ville_RCS__c}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!$Label.Text_NumberRCS} {!Factures_Client__c.Lettre_RCS__c} 
-																{!Factures_Client__c.SIREN_NIF__c}"
+							<apex:outputText value="{!$Label.Text_NumberRCS} {!sofactoapp__Factures_Client__c.sofactoapp__Lettre_RCS__c} 
+																{!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}"
 							/>
 						</apex:outputPanel>
 
 						<!--Compte/ Account-->
-						<apex:outputPanel
-							rendered="{!IF(AND(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCountry = 'France',
+						<apex:outputPanel rendered="{!IF(AND(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCountry = 'France',
 																 (ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c))),
 																	'','none')}"
 						>
-							<apex:outputText
-								value="{!$Label.Sofacto_RCS} 
-															{!Factures_Client__c.Ville_RCS__c}"
+							<apex:outputText value="{!$Label.Sofacto_RCS} 
+															{!sofactoapp__Factures_Client__c.sofactoapp__Ville_RCS__c}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!$Label.Text_NumberRCS} {!Factures_Client__c.Lettre_RCS__c} 
-															{!Factures_Client__c.SIREN_NIF__c}"
+							<apex:outputText value="{!$Label.Text_NumberRCS} {!sofactoapp__Factures_Client__c.sofactoapp__Lettre_RCS__c} 
+															{!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}"
 							/>
 						</apex:outputPanel>
 
 						<!--NIF // EXEPT FRANCE-->
 
 						<!--Donnée comptable / Accounting Data -->
-						<apex:outputPanel
-							rendered="{!IF(AND (sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c != null,
+						<apex:outputPanel rendered="{!IF(AND (sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c != null,
 																   sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__SIREN_NIF__c != null,
 																   sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Pays_facturation__c !='France'),
 																	'','none')}"
 						>
-							<apex:outputText
-								value="{!$Label.sofactoapp__Sofacto_NIF} {!Factures_Client__c.SIREN_NIF__c}"
+							<apex:outputText value="{!$Label.sofactoapp__Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}"
 							/>
 						</apex:outputPanel>
 
 						<!--Compte/ Account-->
-						<apex:outputPanel
-							rendered="{!IF(AND(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCountry != 'France',
+						<apex:outputPanel rendered="{!IF(AND(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCountry != 'France',
 																 (ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c)),
 																 sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__SIREN_NIF__c != null),
 																	'','none')}"
 						>
-							<apex:outputText
-								value="{!$Label.sofactoapp__Sofacto_NIF} {!Factures_Client__c.SIREN_NIF__c}"
+							<apex:outputText value="{!$Label.sofactoapp__Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}"
 							/>
 						</apex:outputPanel>
 					</apex:outputPanel>
 					<br />
 
 					<!--Originale ou Duplicata/ Original or Duplicate-->
-					<apex:outputPanel
-						rendered="{!Factures_Client__c.IsSent__c == true}"
+					<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == true}"
 					>
 						<b>
-							<apex:outputText
-								style="
+							<apex:outputText style="
 									text-transform: uppercase;
 									font-size: 12px;
 									text-align: left;
 								"
-								value="{!Factures_Client__c.ACC_Nom_du_compte_Emise__c}"
+								value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Nom_du_compte_Emise__c}"
 							/>
 						</b>
 						<br />
 
 						<!--Contact client/ Customer's contact-->
-						<apex:outputPanel
-							style="text-align: left"
+						<apex:outputPanel style="text-align: left"
 							layout="none"
-							rendered="{!NOT(ISNULL(Factures_Client__c.ACC_Nom_contact_Emise__c))}"
+							rendered="{!NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__ACC_Nom_contact_Emise__c))}"
 						>
 							<i>
-								<apex:outputText
-									value="{!$Label.sofactoapp__Text_A_l_attention_de}"
+								<apex:outputText value="{!$Label.sofactoapp__Text_A_l_attention_de}"
 								/>
 								&nbsp;: &nbsp;
-								<apex:outputText
-									value="{!Factures_Client__c.sofactoapp__Contact__r.Salutation}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Contact__r.Salutation}"
 								/>&nbsp;
-								<apex:outputText
-									value="{!Factures_Client__c.ACC_Nom_contact_Emise__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Nom_contact_Emise__c}"
 								/>
 							</i>
 						</apex:outputPanel>
 						<br />
 
-						<apex:outputText
-							style="text-align: left"
-							value="{!Factures_Client__c.ACC_Rue_Facturation_Emise__c}"
+						<apex:outputText style="text-align: left"
+							value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Rue_Facturation_Emise__c}"
 						/>
 						<br />
-						<apex:outputText
-							style="text-align: left"
-							value="{!Factures_Client__c.ACC_Code_Postal_Compte_Emise__c} {!Factures_Client__c.ACC_Ville_facturation_emise__c}"
+						<apex:outputText style="text-align: left"
+							value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Code_Postal_Compte_Emise__c} {!sofactoapp__Factures_Client__c.sofactoapp__ACC_Ville_facturation_emise__c}"
 						/>
 						<br />
-						<apex:outputText
-							style="text-align: left"
-							value="{!Factures_Client__c.ACC_Pays_Facturation_emise__c}"
+						<apex:outputText style="text-align: left"
+							value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Pays_Facturation_emise__c}"
 						/>
 						<br />
 						<br />
 
 						<!--TVA intracommunautaire du client/ Customers VAT ID (FR)-->
-						<apex:outputPanel
-							rendered="{!IF(Factures_Client__c.Amount_VAT__c >= 150,'','none')}"
+						<apex:outputPanel rendered="{!IF(sofactoapp__Factures_Client__c.sofactoapp__Amount_VAT__c >= 150,'','none')}"
 						>
 							<br />
-							<apex:outputText
-								style="text-align: left"
-								value="{!$Label.sofactoapp__Text_IntraCommunityTVA} : {!Factures_Client__c.ACC_TVA_intra_Emise__c}"
-								rendered="{!NOT(ISBLANK(Factures_Client__c.sofactoapp__Compte__r.TVA_intra__c))}"
+							<apex:outputText style="text-align: left"
+								value="{!$Label.sofactoapp__Text_IntraCommunityTVA} : {!sofactoapp__Factures_Client__c.sofactoapp__ACC_TVA_intra_Emise__c}"
+								rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__TVA_intra__c))}"
 							/><br />
 						</apex:outputPanel>
 
 						<!--Lettre RCS / Ville RCS / SIREN or NIF // FRANCE ONLY-->
 
 						<!--Donnée comptable / Accounting Data -->
-						<apex:outputPanel
-							rendered="{!IF(AND (sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c != null,
+						<apex:outputPanel rendered="{!IF(AND (sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c != null,
 													sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Lettre_RCS__c != null,
 													sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Pays_facturation__c='France'),
 													'','none')}"
 						>
-							<apex:outputText
-								value="{!$Label.Sofacto_RCS} 
-													{!Factures_Client__c.Ville_RCS__c}"
+							<apex:outputText value="{!$Label.Sofacto_RCS} 
+													{!sofactoapp__Factures_Client__c.sofactoapp__Ville_RCS__c}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!$Label.Text_NumberRCS} {!Factures_Client__c.Lettre_RCS__c} 
-													{!Factures_Client__c.SIREN_NIF__c}"
+							<apex:outputText value="{!$Label.Text_NumberRCS} {!sofactoapp__Factures_Client__c.sofactoapp__Lettre_RCS__c} 
+													{!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}"
 							/>
 						</apex:outputPanel>
 
 						<!--Compte/ Account-->
-						<apex:outputPanel
-							rendered="{!IF(AND(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCountry = 'France',
+						<apex:outputPanel rendered="{!IF(AND(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCountry = 'France',
 													(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c))),
 														'','none')}"
 						>
-							<apex:outputText
-								value="{!$Label.Sofacto_RCS} 
-												{!Factures_Client__c.Ville_RCS__c}"
+							<apex:outputText value="{!$Label.Sofacto_RCS} 
+												{!sofactoapp__Factures_Client__c.sofactoapp__Ville_RCS__c}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!$Label.Text_NumberRCS} {!Factures_Client__c.Lettre_RCS__c} 
-												{!Factures_Client__c.SIREN_NIF__c}"
+							<apex:outputText value="{!$Label.Text_NumberRCS} {!sofactoapp__Factures_Client__c.sofactoapp__Lettre_RCS__c} 
+												{!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}"
 							/>
 						</apex:outputPanel>
 
 						<!--NIF // EXEPT FRANCE-->
 
 						<!--Donnée comptable / Accounting Data -->
-						<apex:outputPanel
-							rendered="{!IF(AND (sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c != null,
+						<apex:outputPanel rendered="{!IF(AND (sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c != null,
 														sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__SIREN_NIF__c != null,
 														sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Pays_facturation__c !='France'),
 														'','none')}"
 						>
-							<apex:outputText
-								value="{!$Label.sofactoapp__Sofacto_NIF} {!Factures_Client__c.SIREN_NIF__c}"
+							<apex:outputText value="{!$Label.sofactoapp__Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}"
 							/>
 						</apex:outputPanel>
 
 						<!--Compte/ Account-->
-						<apex:outputPanel
-							rendered="{!IF(AND(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCountry != 'France',
+						<apex:outputPanel rendered="{!IF(AND(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.BillingCountry != 'France',
 														(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c)),
 														sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__SIREN_NIF__c != null),
 														'','none')}"
 						>
-							<apex:outputText
-								value="{!$Label.sofactoapp__Sofacto_NIF} {!Factures_Client__c.SIREN_NIF__c}"
+							<apex:outputText value="{!$Label.sofactoapp__Sofacto_NIF} {!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}"
 							/>
 						</apex:outputPanel>
 					</apex:outputPanel>
@@ -871,11 +736,10 @@
 			<tr>
 				<td style="width: 60%" class="alignleft"></td>
 				<td
-					style="width:50%;border-left: hidden; border-right: hidden; border-top:hidden; border-bottom:0.2px solid gray;display:{!IF(NOT(ISBLANK(Factures_Client__c.sofactoapp__Compte__r.ShippingStreet)), '', 'none')}"
+					style="width:50%;border-left: hidden; border-right: hidden; border-top:hidden; border-bottom:0.2px solid gray;display:{!IF(NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.ShippingStreet)), '', 'none')}"
 				>
 					<br />
-					<apex:outputText
-						value="{!$Label.sofactoapp__Text_Adresse_livraison}"
+					<apex:outputText value="{!$Label.sofactoapp__Text_Adresse_livraison}"
 						style="font-size: 9px; text-align: left; color: gray"
 					/>
 				</td>
@@ -888,19 +752,16 @@
 						<tr>
 							<td style="width: 50%">
 								<b>
-									<apex:outputText
-										value="{!$ObjectType.Factures_Client__c.Fields.Date_de_facture__c.Label}"
+									<apex:outputText value="{!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__Date_de_facture__c.Label}"
 									/>
 									&nbsp;:&nbsp;
 								</b>
 							</td>
 							<td class="alignleft" style="width: 50%">
 								<b>
-									<apex:outputText
-										value="{0,date,dd'/'MM'/'yyyy}"
+									<apex:outputText value="{0,date,dd'/'MM'/'yyyy}"
 									>
-										<apex:param
-											value="{!Factures_Client__c.Date_de_facture__c}"
+										<apex:param value="{!sofactoapp__Factures_Client__c.sofactoapp__Date_de_facture__c}"
 										/>
 									</apex:outputText>
 								</b>
@@ -912,17 +773,14 @@
 							style="{!IF(NOT(ISNULL(sofactoapp__factures_client__c.sofactoapp__Ech_ance__c)), '', 'none')};"
 						>
 							<td style="width: 50%">
-								<apex:outputText
-									value="{!$ObjectType.Factures_Client__c.Fields.Ech_ance__c.Label}"
+								<apex:outputText value="{!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__Ech_ance__c.Label}"
 								/>
 								&nbsp;:&nbsp;
 							</td>
 							<td class="alignleft" style="width: 50%">
-								<apex:outputText
-									value="{0,date,dd'/'MM'/'yyyy}"
+								<apex:outputText value="{0,date,dd'/'MM'/'yyyy}"
 								>
-									<apex:param
-										value="{!Factures_Client__c.Ech_ance__c}"
+									<apex:param value="{!sofactoapp__Factures_Client__c.sofactoapp__Ech_ance__c}"
 									/>
 								</apex:outputText>
 							</td>
@@ -932,17 +790,14 @@
 							style="display:{!IF(NOT(ISBLANK(sofactoapp__factures_client__c.sofactoapp__Date_de_livraison__c)),'','none')}"
 						>
 							<td style="width: 50%">
-								<apex:outputText
-									value="{!$ObjectType.Factures_Client__c.Fields.Date_de_livraison__c.Label} :"
+								<apex:outputText value="{!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__Date_de_livraison__c.Label} :"
 								/>
 							</td>
 
 							<td class="alignleft" style="width: 50%">
-								<apex:outputText
-									value="{0,date,dd'/'MM'/'yyyy}"
+								<apex:outputText value="{0,date,dd'/'MM'/'yyyy}"
 								>
-									<apex:param
-										value="{!Factures_Client__c.Date_de_livraison__c}"
+									<apex:param value="{!sofactoapp__Factures_Client__c.sofactoapp__Date_de_livraison__c}"
 									/>
 								</apex:outputText>
 							</td>
@@ -953,13 +808,11 @@
 							style="display:{!IF(sofactoapp__factures_client__c.sofactoapp__emetteur_facture__r.sofactoapp__isDisplayAccountNumber__c, '', 'none')}"
 						>
 							<td style="width: 50%">
-								<apex:outputText
-									value="{!$ObjectType.Account.Fields.AccountNumber.Label} : "
+								<apex:outputText value="{!$ObjectType.Account.Fields.AccountNumber.Label} : "
 								/>
 							</td>
 							<td style="width: 50%" class="alignleft">
-								<apex:outputText
-									value="{!Factures_Client__c.sofactoapp__Compte__r.AccountNumber}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.AccountNumber}"
 								/>
 							</td>
 						</tr>
@@ -969,13 +822,11 @@
 							style="display:{!IF(sofactoapp__factures_client__c.sofactoapp__emetteur_facture__r.sofactoapp__isDisplayAccountOwner__c, '', 'none')}"
 						>
 							<td style="width: 50%">
-								<apex:outputText
-									value="{!$Label.sofactoapp__Text_YourContact} :"
+								<apex:outputText value="{!$Label.sofactoapp__Text_YourContact} :"
 								/>
 							</td>
 							<td style="width: 50%" class="alignleft">
-								<apex:outputText
-									value="{!Factures_Client__c.sofactoapp__Compte__r.owner.Name}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.owner.Name}"
 								/>
 							</td>
 						</tr>
@@ -986,13 +837,11 @@
 											NOT(ISBLANK(sofactoapp__factures_client__c.sofactoapp__Opportunit__c))), '', 'none')}"
 						>
 							<td style="width: 50%">
-								<apex:outputText
-									value="{!$Label.sofactoapp__Text_YourContact} :"
+								<apex:outputText value="{!$Label.sofactoapp__Text_YourContact} :"
 								/>
 							</td>
 							<td style="width: 50%" class="alignleft">
-								<apex:outputText
-									value="{!Factures_Client__c.sofactoapp__Opportunit__r.owner.Name}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Opportunit__r.owner.Name}"
 								/>
 							</td>
 						</tr>
@@ -1003,167 +852,133 @@
 
 				<td style="width: 50%; vertical-align: top" class="alignleft">
 					<!--Brouillon ou Proforma/ Draft or Proforma-->
-					<apex:outputPanel
-						rendered="{!Factures_Client__c.IsSent__c == false}"
+					<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == false}"
 					>
-						<apex:outputPanel
-							rendered="{!IF(NOT(ISBLANK(Factures_Client__c.sofactoapp__Compte__r.ShippingStreet)), '', 'none')}"
+						<apex:outputPanel rendered="{!IF(NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.ShippingStreet)), '', 'none')}"
 						>
 							<b>
-								<apex:outputText
-									style="
+								<apex:outputText style="
 										text-transform: uppercase;
 										font-size: 12px;
 									"
-									value="{!Factures_Client__c.sofactoapp__Compte__r.Name}"
+									value="{!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.Name}"
 								/>
 							</b>
 
 							<!--Contact client/ Customer's contact-->
-							<apex:outputPanel
-								layout="none"
-								rendered="{!NOT(ISNULL(Factures_Client__c.ACC_Nom_contact_Emise__c))}"
+							<apex:outputPanel layout="none"
+								rendered="{!NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__ACC_Nom_contact_Emise__c))}"
 							>
 								<br /><i>
-									<apex:outputText
-										value="{!$Label.sofactoapp__Text_A_l_attention_de}"
+									<apex:outputText value="{!$Label.sofactoapp__Text_A_l_attention_de}"
 									/>&nbsp;:&nbsp;
-									<apex:outputText
-										value="{!Factures_Client__c.sofactoapp__Contact__r.Salutation}"
+									<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Contact__r.Salutation}"
 									/>
 									&nbsp;
-									<apex:outputText
-										value="{!Factures_Client__c.ACC_Nom_contact_Emise__c}"
+									<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Nom_contact_Emise__c}"
 									/>
 								</i>
 							</apex:outputPanel>
 							<br />
-							<apex:outputText
-								value="{!Factures_Client__c.sofactoapp__Compte__r.ShippingStreet}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.ShippingStreet}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!Factures_Client__c.sofactoapp__Compte__r.ShippingPostalCode}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.ShippingPostalCode}"
 							/>
 							&nbsp;
-							<apex:outputText
-								value="{!Factures_Client__c.sofactoapp__Compte__r.ShippingCity}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.ShippingCity}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!Factures_Client__c.sofactoapp__Compte__r.ShippingCountry}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.ShippingCountry}"
 							/>
 							<br />
 						</apex:outputPanel>
-						<apex:outputPanel
-							rendered="{!IF(ISBLANK(Factures_Client__c.sofactoapp__Compte__r.ShippingStreet), '', 'none')}"
+						<apex:outputPanel rendered="{!IF(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.ShippingStreet), '', 'none')}"
 						>
 							<i>
-								<apex:outputText
-									value="{!$Label.sofactoapp__Text_Adresse_livraison}"
+								<apex:outputText value="{!$Label.sofactoapp__Text_Adresse_livraison}"
 									style="font-size: 7px"
 								/>
 							</i>
 							<br />
 							<b>
-								<apex:outputText
-									value="{!Factures_Client__c.ACC_Nom_du_compte_Emise__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Nom_du_compte_Emise__c}"
 								/>
 							</b>
 							<br />
-							<apex:outputText
-								value="{!Factures_Client__c.ACC_Rue_Facturation_Emise__c}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Rue_Facturation_Emise__c}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!Factures_Client__c.ACC_Code_Postal_Compte_Emise__c} {!Factures_Client__c.ACC_Ville_facturation_emise__c}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Code_Postal_Compte_Emise__c} {!sofactoapp__Factures_Client__c.sofactoapp__ACC_Ville_facturation_emise__c}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!Factures_Client__c.ACC_Pays_Facturation_emise__c}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Pays_Facturation_emise__c}"
 							/>
 						</apex:outputPanel>
 					</apex:outputPanel>
 
 					<!--Originale ou Duplicata/ Original or Duplicate-->
-					<apex:outputPanel
-						rendered="{!Factures_Client__c.IsSent__c == true}"
+					<apex:outputPanel rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == true}"
 					>
-						<apex:outputPanel
-							rendered="{!IF(NOT(ISBLANK(Factures_Client__c.sofactoapp__Compte__r.ShippingStreet)), '', 'none')}"
+						<apex:outputPanel rendered="{!IF(NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.ShippingStreet)), '', 'none')}"
 						>
 							<b>
-								<apex:outputText
-									style="
+								<apex:outputText style="
 										text-transform: uppercase;
 										font-size: 12px;
 									"
-									value="{!Factures_Client__c.ACC_Nom_du_compte_Emise__c}"
+									value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Nom_du_compte_Emise__c}"
 								/>
 							</b>
 							<br />
 
-							<apex:outputPanel
-								layout="none"
-								rendered="{!NOT(ISNULL(Factures_Client__c.ACC_Nom_contact_Emise__c))}"
+							<apex:outputPanel layout="none"
+								rendered="{!NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__ACC_Nom_contact_Emise__c))}"
 							>
 								<i>
-									<apex:outputText
-										value="{!$Label.sofactoapp__Text_A_l_attention_de}"
+									<apex:outputText value="{!$Label.sofactoapp__Text_A_l_attention_de}"
 									/>&nbsp;:&nbsp;
-									<apex:outputText
-										value="{!Factures_Client__c.sofactoapp__Contact__r.Salutation}"
+									<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Contact__r.Salutation}"
 									/>
 									&nbsp;
-									<apex:outputText
-										value="{!Factures_Client__c.ACC_Nom_contact_Emise__c}"
+									<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Nom_contact_Emise__c}"
 									/>
 								</i>
 							</apex:outputPanel>
 							<br />
-							<apex:outputText
-								value="{!Factures_Client__c.ACC_Rue_d_exp_dition_emise__c}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Rue_d_exp_dition_emise__c}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!Factures_Client__c.ACC_Code_postal_d_exp_dition_emise__c}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Code_postal_d_exp_dition_emise__c}"
 							/>
 							&nbsp;
-							<apex:outputText
-								value="{!Factures_Client__c.ACC_Ville_d_exp_dition_emise__c}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Ville_d_exp_dition_emise__c}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!Factures_Client__c.ACC_Pays_d_exp_dition_emise__c}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Pays_d_exp_dition_emise__c}"
 							/>
 							<br />
 						</apex:outputPanel>
-						<apex:outputPanel
-							rendered="{!IF(ISBLANK(Factures_Client__c.sofactoapp__Compte__r.ShippingStreet), '', 'none')}"
+						<apex:outputPanel rendered="{!IF(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Compte__r.ShippingStreet), '', 'none')}"
 						>
 							<i>
-								<apex:outputText
-									value="{!$Label.sofactoapp__Text_Adresse_livraison}"
+								<apex:outputText value="{!$Label.sofactoapp__Text_Adresse_livraison}"
 									style="font-size: 7px"
 								/>
 							</i>
 							<br />
 							<b>
-								<apex:outputText
-									value="{!Factures_Client__c.ACC_Nom_du_compte_Emise__c}"
+								<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Nom_du_compte_Emise__c}"
 								/>
 							</b>
 							<br />
-							<apex:outputText
-								value="{!Factures_Client__c.ACC_Rue_Facturation_Emise__c}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Rue_Facturation_Emise__c}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!Factures_Client__c.ACC_Code_Postal_Compte_Emise__c} {!Factures_Client__c.ACC_Ville_facturation_emise__c}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Code_Postal_Compte_Emise__c} {!sofactoapp__Factures_Client__c.sofactoapp__ACC_Ville_facturation_emise__c}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!Factures_Client__c.ACC_Pays_Facturation_emise__c}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__ACC_Pays_Facturation_emise__c}"
 							/>
 						</apex:outputPanel>
 					</apex:outputPanel>
@@ -1180,23 +995,20 @@
 					<br />
 
 					<!--Objet de la facture/ Invoice Subject-->
-					<apex:outputPanel
-						rendered="{!NOT(ISBLANK(Factures_Client__c.Objet_Facture__c))}"
+					<apex:outputPanel rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Objet_Facture__c))}"
 						layout="none"
 					>
 						<hr />
-						<apex:outputText
-							style="
+						<apex:outputText style="
 								color: gray;
 								text-transform: uppercase;
 								font-size: 20px;
 							"
-							value="{!$ObjectType.Factures_Client__c.Fields.Objet_Facture__c.Label} :"
+							value="{!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__Objet_Facture__c.Label} :"
 						/>
 						&nbsp;
-						<apex:outputText
-							style="font-size: 20px"
-							value="{!Factures_Client__c.Objet_Facture__c}"
+						<apex:outputText style="font-size: 20px"
+							value="{!sofactoapp__Factures_Client__c.sofactoapp__Objet_Facture__c}"
 						/>
 						<br />
 						<hr />
@@ -1204,34 +1016,28 @@
 					</apex:outputPanel>
 
 					<!--V/Ref / Reference-->
-					<apex:outputPanel
-						rendered="{!NOT(ISBLANK(Factures_Client__c.V_R_f__c))}"
+					<apex:outputPanel rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__V_R_f__c))}"
 						layout="none"
 					>
-						<apex:outputText
-							style="color: gray; text-transform: uppercase"
-							value="{!$ObjectType.Factures_Client__c.Fields.V_R_f__c.Label} :"
+						<apex:outputText style="color: gray; text-transform: uppercase"
+							value="{!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__V_R_f__c.Label} :"
 						/>
 						&nbsp;
-						<apex:outputText
-							value="{!Factures_Client__c.V_R_f__c}"
+						<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__V_R_f__c}"
 						/>
 						<br />
 					</apex:outputPanel>
 
 					<!--Commentaire/ Comment-->
-					<apex:outputPanel
-						rendered="{!NOT(ISBLANK(Factures_Client__c.Commentaires__c))}"
+					<apex:outputPanel rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Commentaires__c))}"
 						layout="none"
 					>
-						<apex:outputText
-							style="color: gray; text-transform: uppercase"
-							value="{!$ObjectType.Factures_Client__c.Fields.Commentaires__c.Label} :"
+						<apex:outputText style="color: gray; text-transform: uppercase"
+							value="{!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__Commentaires__c.Label} :"
 						/>
 						&nbsp;
 
-						<apex:outputText
-							value="{!Factures_Client__c.Commentaires__c}"
+						<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Commentaires__c}"
 						/>
 					</apex:outputPanel>
 				</td>
@@ -1263,8 +1069,7 @@
 									border-bottom: 0.2px solid black;
 								"
 							>
-								<apex:outputText
-									value="{!$ObjectType.Ligne_de_Facture__c.Fields.Description__c.Label}"
+								<apex:outputText value="{!$ObjectType.sofactoapp__Ligne_de_Facture__c.Fields.sofactoapp__Description__c.Label}"
 								/>
 							</td>
 
@@ -1279,8 +1084,7 @@
 									border-bottom: 0.2px solid black;
 								"
 							>
-								<apex:outputText
-									value="{!$ObjectType.Ligne_de_Facture__c.Fields.Prix_Unitaire_HT__c.Label}"
+								<apex:outputText value="{!$ObjectType.sofactoapp__Ligne_de_Facture__c.Fields.sofactoapp__Prix_Unitaire_HT__c.Label}"
 								/>
 							</td>
 
@@ -1295,8 +1099,7 @@
 									border-bottom: 0.2px solid black;
 								"
 							>
-								<apex:outputText
-									value="{!$ObjectType.Ligne_de_Facture__c.Fields.Quantit__c.Label}"
+								<apex:outputText value="{!$ObjectType.sofactoapp__Ligne_de_Facture__c.Fields.sofactoapp__Quantit__c.Label}"
 								/>
 							</td>
 
@@ -1305,8 +1108,7 @@
 								class="aligncenter borderOn"
 								style="display:{!IF(AND(sofactoapp__factures_client__c.sofactoapp__Montant_remise_lignes__c > 0,sofactoapp__factures_client__c.sofactoapp__Afficher_remise__c==true), '', 'none')};color:gray;border-left: hidden; border-right: hidden; border-top:hidden; border-bottom:0.2px solid black;"
 							>
-								<apex:outputText
-									value="{!$Label.sofactoapp__Text_Remise}"
+								<apex:outputText value="{!$Label.sofactoapp__Text_Remise}"
 								/>
 							</td>
 
@@ -1315,8 +1117,7 @@
 								class="aligncenter borderOn"
 								style="display:{!IF(sofactoapp__factures_client__c.sofactoapp__Montant_TVA_apres_remise__c != 0,'', 'none')};color:gray;border-left: hidden; border-right: hidden; border-top:hidden; border-bottom:0.2px solid black;"
 							>
-								<apex:outputText
-									value="{!$Label.sofactoapp__Text_TVA}"
+								<apex:outputText value="{!$Label.sofactoapp__Text_TVA}"
 								/>
 							</td>
 
@@ -1325,8 +1126,7 @@
 								class="aligncenter borderOn"
 								style="display:{!IF(AND(Factures_client__c.Afficher_pourcentage__c, Factures_client__c.Sous_type__c != 'Solde', Factures_client__c.Sous_type__c != 'Acompte'), '', 'none')}; color:gray;border-left: hidden; border-right: hidden; border-top:hidden; border-bottom:0.2px solid black;"
 							>
-								<apex:outputText
-									value="{!$Label.sofactoapp__Text_PercentBilled}"
+								<apex:outputText value="{!$Label.sofactoapp__Text_PercentBilled}"
 								/>
 							</td>
 
@@ -1342,25 +1142,21 @@
 									border-bottom: 0.2px solid black;
 								"
 							>
-								<apex:outputText
-									value="{!$ObjectType.Ligne_de_Facture__c.Fields.Montant_total_HT__c.Label}"
+								<apex:outputText value="{!$ObjectType.sofactoapp__Ligne_de_Facture__c.Fields.sofactoapp__Montant_total_HT__c.Label}"
 								/>
 							</td>
 						</tr>
 
 						<!-- Pour chaque poste de facture/ For each invoice line item -->
-						<apex:repeat
-							value="{!orderedInvoiceLineItems}"
+						<apex:repeat value="{!orderedInvoiceLineItems}"
 							var="orderedLigne"
 							id="orderedLignes"
 						>
-							<apex:repeat
-								value="{!sofactoapp__Factures_Client__c.Lignes_de_Facture__r}"
+							<apex:repeat value="{!sofactoapp__Factures_Client__c.Lignes_de_Facture__r}"
 								var="ligne"
 								id="lignes"
 							>
-								<apex:outputPanel
-									layout="none"
+								<apex:outputPanel layout="none"
 									rendered="{!ligne.Id == orderedLigne}"
 								>
 									<tr
@@ -1381,35 +1177,30 @@
 												border-bottom: 0.2px solid black;
 											"
 										>
-											<apex:outputText
-												style="
+											<apex:outputText style="
 													color: gray;
 													text-transform: uppercase;
 												"
-												value="{!ligne.Description__c} {!IF(ligne.Exon_ration_Vat__c=='Livraisons intracommunautaires','*','')} {!IF(ligne.Exon_ration_Vat__c=='Autoliquidation de TVA','**','')} {!IF(ligne.Exon_ration_Vat__c=='Exportations hors-UE','***','')}"
+												value="{!ligne.sofactoapp__Description__c} {!IF(ligne.sofactoapp__Exon_ration_Vat__c=='Livraisons intracommunautaires','*','')} {!IF(ligne.sofactoapp__Exon_ration_Vat__c=='Autoliquidation de TVA','**','')} {!IF(ligne.sofactoapp__Exon_ration_Vat__c=='Exportations hors-UE','***','')}"
 											/>
-											<apex:outputPanel
-												layout="none"
-												rendered="{!Factures_Client__c.Afficher_details_produit__c}"
+											<apex:outputPanel layout="none"
+												rendered="{!sofactoapp__Factures_Client__c.sofactoapp__Afficher_details_produit__c}"
 											>
 												<br />
 												<i>
-													<apex:outputText
-														value="{!ligne.sofactoapp__Produit__r.Description}"
+													<apex:outputText value="{!ligne.sofactoapp__Produit__r.Description}"
 														style="font-size: 9px"
 													/>
 												</i>
 											</apex:outputPanel>
-											<apex:outputPanel
-												layout="none"
-												rendered="{!Factures_Client__c.Afficher_description_detaillee__c}"
+											<apex:outputPanel layout="none"
+												rendered="{!sofactoapp__Factures_Client__c.sofactoapp__Afficher_description_detaillee__c}"
 											>
 												<br />
 												<span
 													style="font-style: italic"
 												>
-													<apex:outputText
-														value="{!ligne.Description_detaillee__c}"
+													<apex:outputText value="{!ligne.sofactoapp__Description_detaillee__c}"
 														style="font-size: 9px"
 													/>
 												</span>
@@ -1428,21 +1219,19 @@
 												border-bottom: 0.2px solid black;
 											"
 										>
-											<c:CurrencyFormat
-												p_scale="2"
+											<c:CurrencyFormat p_scale="2"
 												p_stripTrailingZeros="false"
-												p_language="{!Factures_Client__c.Langue__c}"
-												p_amount="{!ligne.Prix_Unitaire_HT__c}"
+												p_language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
+												p_amount="{!ligne.sofactoapp__Prix_Unitaire_HT__c}"
 												p_currency="{!IF(hasMultiCurrency = true, invoiceCurrency, '')}"
-												rendered="{!Factures_Client__c.Montant_remise_lignes__c > 0}"
+												rendered="{!sofactoapp__Factures_Client__c.sofactoapp__Montant_remise_lignes__c > 0}"
 											/>
-											<c:CurrencyFormat
-												p_scale="2"
+											<c:CurrencyFormat p_scale="2"
 												p_stripTrailingZeros="2"
-												p_language="{!Factures_Client__c.Langue__c}"
-												p_amount="{!ligne.Prix_Unitaire_HT__c}"
+												p_language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
+												p_amount="{!ligne.sofactoapp__Prix_Unitaire_HT__c}"
 												p_currency="{!IF(hasMultiCurrency = true, invoiceCurrency, '')}"
-												rendered="{!NOT(Factures_Client__c.Montant_remise_lignes__c > 0)}"
+												rendered="{!NOT(sofactoapp__Factures_Client__c.sofactoapp__Montant_remise_lignes__c > 0)}"
 											/>
 										</td>
 
@@ -1457,8 +1246,7 @@
 												border-bottom: 0.2px solid black;
 											"
 										>
-											<apex:outputText
-												value="{!ligne.Quantit__c}"
+											<apex:outputText value="{!ligne.sofactoapp__Quantit__c}"
 											/>
 										</td>
 
@@ -1468,19 +1256,15 @@
 											width="10%"
 											style="display:{!IF(AND(sofactoapp__factures_client__c.sofactoapp__Montant_remise_lignes__c > 0,sofactoapp__factures_client__c.sofactoapp__Afficher_remise__c==true), '', 'none')};border-left: hidden; border-right: hidden; border-top:hidden; border-bottom:0.2px solid black;"
 										>
-											<apex:outputPanel
-												rendered="{!IF(ligne.Taux_Remise_2__c!=0,'', 'none')}"
+											<apex:outputPanel rendered="{!IF(ligne.sofactoapp__Taux_Remise_2__c!=0,'', 'none')}"
 											>
-												<apex:outputText
-													value="{0, number, ###.00}%"
+												<apex:outputText value="{0, number, ###.00}%"
 												>
-													<apex:param
-														value="{!ligne.Taux_Remise_2__c}"
+													<apex:param value="{!ligne.sofactoapp__Taux_Remise_2__c}"
 													/>
 												</apex:outputText>
 											</apex:outputPanel>
-											<apex:outputPanel
-												rendered="{!IF(ligne.Taux_Remise_2__c ==0,'', 'none')}"
+											<apex:outputPanel rendered="{!IF(ligne.sofactoapp__Taux_Remise_2__c ==0,'', 'none')}"
 											>
 												<apex:outputText value=" " />
 											</apex:outputPanel>
@@ -1492,8 +1276,7 @@
 											width="10%"
 											style="display:{!IF(Factures_client__c.Montant_TVA_apres_remise__c != 0,'', 'none')};border-left: hidden; border-right: hidden; border-top:hidden; border-bottom:0.2px solid black;"
 										>
-											<apex:outputText
-												value="{!ligne.Taux_de_TVA_list__c}"
+											<apex:outputText value="{!ligne.sofactoapp__Taux_de_TVA_list__c}"
 											/>
 										</td>
 
@@ -1503,22 +1286,17 @@
 											width="5%"
 											style="display:{!IF(AND(Factures_client__c.Afficher_pourcentage__c, Factures_client__c.Sous_type__c != 'Solde', Factures_client__c.Sous_type__c != 'Acompte'), '', 'none')}; border-left: hidden; border-right: hidden; border-top:hidden; border-bottom:0.2px solid black;"
 										>
-											<apex:outputPanel
-												rendered="{!IF(NOT(ISBLANK(ligne.Pourcentage__c)),'', 'none')}"
+											<apex:outputPanel rendered="{!IF(NOT(ISBLANK(ligne.sofactoapp__Pourcentage__c)),'', 'none')}"
 											>
-												<apex:outputText
-													value="{0, number, ###.00}%"
+												<apex:outputText value="{0, number, ###.00}%"
 												>
-													<apex:param
-														value="{!ligne.Pourcentage__c}"
+													<apex:param value="{!ligne.sofactoapp__Pourcentage__c}"
 													/>
 												</apex:outputText>
 											</apex:outputPanel>
-											<apex:outputPanel
-												rendered="{!IF(ISBLANK(ligne.Pourcentage__c),'', 'none')}"
+											<apex:outputPanel rendered="{!IF(ISBLANK(ligne.sofactoapp__Pourcentage__c),'', 'none')}"
 											>
-												<apex:outputText
-													value="0.00%"
+												<apex:outputText value="0.00%"
 												/>
 											</apex:outputPanel>
 										</td>
@@ -1534,11 +1312,10 @@
 												border-bottom: 0.2px solid black;
 											"
 										>
-											<c:CurrencyFormat
-												p_amount="{!IF(Factures_client__c.Sous_type__c = 'Solde', (ligne.Montant_total_HT__c * 100)/ligne.Pourcentage__c, ligne.Montant_total_HT__c)}"
+											<c:CurrencyFormat p_amount="{!IF(sofactoapp__Factures_Client__c.sofactoapp__Sous_type__c = 'Solde', (ligne.sofactoapp__Montant_total_HT__c * 100)/ligne.sofactoapp__Pourcentage__c, ligne.sofactoapp__Montant_total_HT__c)}"
 												p_scale="2"
 												p_stripTrailingZeros="2"
-												p_language="{!Factures_Client__c.Langue__c}"
+												p_language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
 												p_currency="{!IF(hasMultiCurrency = true, invoiceCurrency, '')}"
 											/>
 										</td>
@@ -1547,8 +1324,7 @@
 							</apex:repeat>
 						</apex:repeat>
 
-						<apex:variable
-							var="colspan1"
+						<apex:variable var="colspan1"
 							value="{!IF(AND(sofactoapp__factures_client__c.sofactoapp__Montant_TVA_apres_remise__c != 0,
 									sofactoapp__factures_client__c.sofactoapp__Montant_remise_lignes__c > 0,
 									sofactoapp__factures_client__c.sofactoapp__Afficher_pourcentage__c),7,
@@ -1573,8 +1349,7 @@
 																			5)))))))}"
 						/>
 
-						<apex:variable
-							var="colspan2"
+						<apex:variable var="colspan2"
 							value="{!IF(AND(sofactoapp__factures_client__c.sofactoapp__Montant_TVA_apres_remise__c != 0,
 									sofactoapp__factures_client__c.sofactoapp__Montant_remise_lignes__c > 0,
 									sofactoapp__factures_client__c.sofactoapp__Afficher_pourcentage__c),5,
@@ -1598,8 +1373,7 @@
 																		sofactoapp__factures_client__c.sofactoapp__Afficher_pourcentage__c), 4,
 																			3)))))))}"
 						/>
-						<apex:variable
-							var="colspan3"
+						<apex:variable var="colspan3"
 							value="{!IF(AND(sofactoapp__factures_client__c.sofactoapp__Montant_TVA_apres_remise__c != 0,
 									sofactoapp__factures_client__c.sofactoapp__Montant_remise_lignes__c > 0,
 									sofactoapp__factures_client__c.sofactoapp__Afficher_pourcentage__c),5,
@@ -1644,16 +1418,14 @@
 						>
 							<td class="borderOff"></td>
 							<td colspan="{!colspan2}">
-								<apex:outputText
-									value="{!$Label.sofactoapp__Text_SubtotalDiscount} :"
+								<apex:outputText value="{!$Label.sofactoapp__Text_SubtotalDiscount} :"
 								/>
 							</td>
 							<td class="alignright">
-								<c:CurrencyFormat
-									p_scale="2"
+								<c:CurrencyFormat p_scale="2"
 									p_stripTrailingZeros="2"
-									p_language="{!Factures_Client__c.Langue__c}"
-									p_amount="{!Factures_Client__c.Montant_remise_lignes__c}"
+									p_language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
+									p_amount="{!sofactoapp__Factures_Client__c.sofactoapp__Montant_remise_lignes__c}"
 									p_currency="{!IF(hasMultiCurrency = true, invoiceCurrency, '')}"
 								/>
 							</td>
@@ -1665,27 +1437,23 @@
 						>
 							<td class="borderOff"></td>
 							<td colspan="{!colspan2}">
-								<apex:outputText
-									value="{!$Label.sofactoapp__Text_SubtotalGlobalDiscount} :"
+								<apex:outputText value="{!$Label.sofactoapp__Text_SubtotalGlobalDiscount} :"
 								/>&nbsp;
 								<apex:outputText value="{0, number, ###.00}%">
-									<apex:param
-										value="{!Factures_Client__c.Discount_rate__c}"
+									<apex:param value="{!sofactoapp__Factures_Client__c.sofactoapp__Discount_rate__c}"
 									/>
 								</apex:outputText>
 								<br />
 								<i>
-									<apex:outputText
-										value="{!Factures_Client__c.Discount_description__c}"
+									<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Discount_description__c}"
 									/>
 								</i>
 							</td>
 							<td class="alignright">
-								<c:CurrencyFormat
-									p_scale="2"
+								<c:CurrencyFormat p_scale="2"
 									p_stripTrailingZeros="2"
-									p_language="{!Factures_Client__c.Langue__c}"
-									p_amount="{!Factures_Client__c.Discount_amount__c}"
+									p_language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
+									p_amount="{!sofactoapp__Factures_Client__c.sofactoapp__Discount_amount__c}"
 									p_currency="{!IF(hasMultiCurrency = true, invoiceCurrency, '')}"
 								/>
 							</td>
@@ -1707,8 +1475,7 @@
 									border-top: 0.2px solid black;
 								"
 							>
-								<apex:outputText
-									value="{!$ObjectType.Factures_Client__c.Fields.Total_remise__c.Label}"
+								<apex:outputText value="{!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__Total_remise__c.Label}"
 								/>
 							</td>
 							<td
@@ -1722,11 +1489,10 @@
 									border-top: 0.2px solid black;
 								"
 							>
-								<c:CurrencyFormat
-									p_amount="{!Factures_Client__c.Total_remise__c}"
+								<c:CurrencyFormat p_amount="{!sofactoapp__Factures_Client__c.sofactoapp__Total_remise__c}"
 									p_scale="2"
 									p_stripTrailingZeros="2"
-									p_language="{!Factures_Client__c.Langue__c}"
+									p_language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
 									p_currency="{!IF(hasMultiCurrency = true, invoiceCurrency, '')}"
 								/>
 							</td>
@@ -1743,16 +1509,14 @@
 						<tr>
 							<td class="borderOff"></td>
 							<td colspan="{!colspan2}">
-								<apex:outputText
-									value="{!$ObjectType.Factures_Client__c.Fields.Amount_exVAT__c.Label}"
+								<apex:outputText value="{!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__Amount_exVAT__c.Label}"
 								/>
 							</td>
 							<td class="alignright">
-								<c:CurrencyFormat
-									p_scale="2"
-									p_amount="{!IF(Factures_client__c.Sous_type__c = 'Solde', IF(AND(ISBLANK(Factures_client__c.Opportunit__c), ISBLANK(Factures_client__c.Offre__c)), Factures_Client__c.Amount_exVAT__c, IF(ISBLANK(Factures_client__c.Offre__c), Factures_client__c.Opportunit__r.Amount, Factures_client__c.Offre__r.Montant_HT__c)), Factures_Client__c.Amount_exVAT__c)}"
+								<c:CurrencyFormat p_scale="2"
+									p_amount="{!IF(sofactoapp__Factures_Client__c.sofactoapp__Sous_type__c = 'Solde', IF(AND(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Opportunit__c), ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Offre__c)), sofactoapp__Factures_Client__c.sofactoapp__Amount_exVAT__c, IF(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Offre__c), sofactoapp__Factures_Client__c.Opportunit__r.Amount, sofactoapp__Factures_Client__c.Offre__r.sofactoapp__Montant_HT__c)), sofactoapp__Factures_Client__c.sofactoapp__Amount_exVAT__c)}"
 									p_stripTrailingZeros="2"
-									p_language="{!Factures_Client__c.Langue__c}"
+									p_language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
 									p_currency="{!IF(hasMultiCurrency = true, invoiceCurrency, '')}"
 								/>
 							</td>
@@ -1764,16 +1528,14 @@
 						>
 							<td class="borderOff"></td>
 							<td colspan="{!colspan2}">
-								<apex:outputText
-									value="{!$ObjectType.Factures_Client__c.Fields.Montant_TVA_apres_remise__c.Label}"
+								<apex:outputText value="{!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__Montant_TVA_apres_remise__c.Label}"
 								/>
 							</td>
 							<td class="alignright">
-								<c:CurrencyFormat
-									p_scale="2"
+								<c:CurrencyFormat p_scale="2"
 									p_stripTrailingZeros="2"
-									p_amount="{!IF(Factures_client__c.Sous_type__c = 'Solde', IF(AND(ISBLANK(Factures_client__c.Opportunit__c), ISBLANK(Factures_client__c.Offre__c)), Factures_Client__c.Montant_TVA_apres_remise__c, IF(ISBLANK(Factures_client__c.Offre__c), Factures_client__c.Opportunit__r.Montant_TTC__c - Factures_client__c.Opportunit__r.Amount, Factures_client__c.Offre__r.Montant_TVA__c)), Factures_Client__c.Montant_TVA_apres_remise__c)}"
-									p_language="{!Factures_Client__c.Langue__c}"
+									p_amount="{!IF(sofactoapp__Factures_Client__c.sofactoapp__Sous_type__c = 'Solde', IF(AND(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Opportunit__c), ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Offre__c)), sofactoapp__Factures_Client__c.sofactoapp__Montant_TVA_apres_remise__c, IF(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Offre__c), sofactoapp__Factures_Client__c.Opportunit__r.sofactoapp__Montant_TTC__c - sofactoapp__Factures_Client__c.Opportunit__r.Amount, sofactoapp__Factures_Client__c.Offre__r.sofactoapp__Montant_TVA__c)), sofactoapp__Factures_Client__c.sofactoapp__Montant_TVA_apres_remise__c)}"
+									p_language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
 									p_currency="{!IF(hasMultiCurrency = true, invoiceCurrency, '')}"
 								/>
 							</td>
@@ -1785,16 +1547,14 @@
 						>
 							<td class="borderOff"></td>
 							<td colspan="{!colspan2}">
-								<apex:outputText
-									value="{!$ObjectType.Factures_Client__c.Fields.Amount_VAT__c.Label}"
+								<apex:outputText value="{!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__Amount_VAT__c.Label}"
 								/>
 							</td>
 							<td class="alignright">
-								<c:CurrencyFormat
-									p_scale="2"
+								<c:CurrencyFormat p_scale="2"
 									p_stripTrailingZeros="2"
-									p_amount="{!Factures_Client__c.Amount_VAT__c + Factures_Client__c.TotalAcompteTTC__c}"
-									p_language="{!Factures_Client__c.Langue__c}"
+									p_amount="{!sofactoapp__Factures_Client__c.sofactoapp__Amount_VAT__c + sofactoapp__Factures_Client__c.sofactoapp__TotalAcompteTTC__c}"
+									p_language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
 									p_currency="{!IF(hasMultiCurrency = true, invoiceCurrency, '')}"
 								/>
 							</td>
@@ -1802,7 +1562,7 @@
 
 						<!-- Total Acompte -->
 						<tr
-							style="display:{!IF(Factures_client__c.Sous_type__c = 'Solde','', 'none')};"
+							style="display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Sous_type__c = 'Solde','', 'none')};"
 						>
 							<td class="borderOff"></td>
 							<td
@@ -1814,8 +1574,7 @@
 									color: white;
 								"
 							>
-								<apex:outputText
-									value="{!$ObjectType.Factures_Client__c.Fields.TotalAcompteTTC__c.Label}"
+								<apex:outputText value="{!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__TotalAcompteTTC__c.Label}"
 								/>
 							</td>
 							<td
@@ -1827,11 +1586,10 @@
 									color: white;
 								"
 							>
-								<c:CurrencyFormat
-									p_scale="2"
+								<c:CurrencyFormat p_scale="2"
 									p_stripTrailingZeros="2"
-									p_amount="{!Factures_Client__c.TotalAcompteTTC__c}"
-									p_language="{!Factures_Client__c.Langue__c}"
+									p_amount="{!sofactoapp__Factures_Client__c.sofactoapp__TotalAcompteTTC__c}"
+									p_language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
 									p_currency="{!IF(hasMultiCurrency = true, invoiceCurrency, '')}"
 								/>
 							</td>
@@ -1851,16 +1609,14 @@
 								style="background-color: white"
 							></td>
 							<td colspan="{!colspan2}">
-								<apex:outputText
-									value="{!IF(Factures_client__c.Sous_type__c = 'Solde', $Label.sofactoapp__Text_NetPayable, $ObjectType.Factures_Client__c.Fields.Amount_VAT__c.Label)}"
+								<apex:outputText value="{!IF(sofactoapp__Factures_Client__c.sofactoapp__Sous_type__c = 'Solde', $Label.sofactoapp__Text_NetPayable, $ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__Amount_VAT__c.Label)}"
 								/>
 							</td>
 							<td class="alignright">
-								<c:CurrencyFormat
-									p_scale="2"
+								<c:CurrencyFormat p_scale="2"
 									p_stripTrailingZeros="2"
-									p_amount="{!Factures_Client__c.Amount_VAT__c}"
-									p_language="{!Factures_Client__c.Langue__c}"
+									p_amount="{!sofactoapp__Factures_Client__c.sofactoapp__Amount_VAT__c}"
+									p_language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
 									p_currency="{!IF(hasMultiCurrency = true, invoiceCurrency, '')}"
 								/>
 							</td>
@@ -1872,12 +1628,11 @@
 							</td>
 						</tr>
 					</table>
-					<apex:outputText
-						style="display:{!IF(Factures_client__c.Sous_type__c = 'Solde','', 'none')}"
-						value="{!$Label.Invoicing_Deposits_History_Text}"
+					<apex:outputText style="display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Sous_type__c = 'Solde','', 'none')}"
+						value="{!$Label.sofactoapp__Invoicing_Deposits_History_Text}"
 					/>
 					<table
-						style="width:90%; display:{!IF(Factures_client__c.Sous_type__c = 'Solde','', 'none')}"
+						style="width:90%; display:{!IF(sofactoapp__Factures_Client__c.sofactoapp__Sous_type__c = 'Solde','', 'none')}"
 					>
 						<tr style="color: gray; text-transform: uppercase">
 							<!--Réference / Reference-->
@@ -1892,8 +1647,7 @@
 									border-bottom: 0.2px solid black;
 								"
 							>
-								<apex:outputText
-									value="{!$ObjectType.Factures_client__c.Fields.Reference__c.Label}"
+								<apex:outputText value="{!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__Reference__c.Label}"
 								/>
 							</td>
 
@@ -1909,8 +1663,7 @@
 									border-bottom: 0.2px solid black;
 								"
 							>
-								<apex:outputText
-									value="{!$ObjectType.Factures_client__c.Fields.Date_de_facture__c.Label}"
+								<apex:outputText value="{!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__Date_de_facture__c.Label}"
 								/>
 							</td>
 
@@ -1926,8 +1679,7 @@
 									border-bottom: 0.2px solid black;
 								"
 							>
-								<apex:outputText
-									value="{!$ObjectType.Factures_client__c.Fields.Amount_exVAT__c.Label}"
+								<apex:outputText value="{!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__Amount_exVAT__c.Label}"
 								/>
 							</td>
 
@@ -1943,7 +1695,7 @@
 									border-bottom: 0.2px solid black;
 								"
 							>
-								<apex:outputText value="{!$Label.Text_TVA}" />
+								<apex:outputText value="{!$Label.sofactoapp__Text_TVA}" />
 							</td>
 
 							<!--Total TTC / Amount VAT-->
@@ -1958,13 +1710,11 @@
 									border-bottom: 0.2px solid black;
 								"
 							>
-								<apex:outputText
-									value="{!$ObjectType.Factures_client__c.Fields.Amount_VAT__c.Label}"
+								<apex:outputText value="{!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__Amount_VAT__c.Label}"
 								/>
 							</td>
 						</tr>
-						<apex:repeat
-							value="{!depositInvoices}"
+						<apex:repeat value="{!depositInvoices}"
 							var="invoice"
 							id="invoices"
 						>
@@ -1979,8 +1729,7 @@
 										border-bottom: 0.2px solid black;
 									"
 								>
-									<apex:outputText
-										value="{!IF(invoice.Reference__c != null, invoice.Reference__c, invoice.Name)}"
+									<apex:outputText value="{!IF(invoice.sofactoapp__Reference__c != null, invoice.sofactoapp__Reference__c, invoice.Name)}"
 									/>
 									<!--Date de facture / Invoice date-->
 								</td>
@@ -1993,11 +1742,9 @@
 										border-bottom: 0.2px solid black;
 									"
 								>
-									<apex:outputText
-										value="{0, date, dd'/'MM'/'yyyy}"
+									<apex:outputText value="{0, date, dd'/'MM'/'yyyy}"
 									>
-										<apex:param
-											value="{!invoice.Date_de_Facture__c}"
+										<apex:param value="{!invoice.sofactoapp__Date_de_facture__c}"
 										/>
 									</apex:outputText>
 								</td>
@@ -2011,11 +1758,10 @@
 										border-bottom: 0.2px solid black;
 									"
 								>
-									<c:CurrencyFormat
-										p_scale="2"
+									<c:CurrencyFormat p_scale="2"
 										p_stripTrailingZeros="2"
-										p_amount="{!invoice.Amount_exVAT__c}"
-										p_language="{!Factures_Client__c.Langue__c}"
+										p_amount="{!invoice.sofactoapp__Amount_exVAT__c}"
+										p_language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
 										p_currency="{!IF(hasMultiCurrency = true, invoiceCurrency, '')}"
 									/>
 								</td>
@@ -2030,11 +1776,10 @@
 										border-bottom: 0.2px solid black;
 									"
 								>
-									<c:CurrencyFormat
-										p_scale="2"
+									<c:CurrencyFormat p_scale="2"
 										p_stripTrailingZeros="2"
-										p_amount="{!invoice.VAT__c}"
-										p_language="{!Factures_Client__c.Langue__c}"
+										p_amount="{!invoice.sofactoapp__VAT__c}"
+										p_language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
 										p_currency="{!IF(hasMultiCurrency = true, invoiceCurrency, '')}"
 									/>
 									<!--Total TTC / Amount VAT-->
@@ -2047,11 +1792,10 @@
 											border-bottom: 0.2px solid black;
 										"
 									>
-										<c:CurrencyFormat
-											p_scale="2"
+										<c:CurrencyFormat p_scale="2"
 											p_stripTrailingZeros="2"
-											p_amount="{!invoice.Amount_VAT__c}"
-											p_language="{!Factures_Client__c.Langue__c}"
+											p_amount="{!invoice.sofactoapp__Amount_VAT__c}"
+											p_language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
 											p_currency="{!IF(hasMultiCurrency = true, invoiceCurrency, '')}"
 										/>
 									</td>
@@ -2060,8 +1804,7 @@
 						</apex:repeat>
 					</table>
 					<!--Exonération de tva/Vat exemption-->
-					<apex:outputPanel
-						layout="none"
+					<apex:outputPanel layout="none"
 						style="
 							page-break-before: auto;
 							page-break-inside: avoid;
@@ -2071,14 +1814,11 @@
 						<tr>
 							<td class="borderOff">
 								<i
-									><apex:outputText
-										value="* {!$Label.sofactoapp__Text_invoiceLineItem_Exo_Vat_Liv_Intra}" />
+									><apex:outputText value="* {!$Label.sofactoapp__Text_invoiceLineItem_Exo_Vat_Liv_Intra}" />
 									<br />
-									<apex:outputText
-										value="** {!$Label.sofactoapp__Text_Exo_Vat_Autoliquidation}" />
+									<apex:outputText value="** {!$Label.sofactoapp__Text_Exo_Vat_Autoliquidation}" />
 									<br />
-									<apex:outputText
-										value="*** {!$Label.sofactoapp__Text_invoiceLineItem_Exo_Vat_Export}"
+									<apex:outputText value="*** {!$Label.sofactoapp__Text_invoiceLineItem_Exo_Vat_Export}"
 								/></i>
 							</td>
 						</tr>
@@ -2261,16 +2001,14 @@
 			<br />
 
 			<hr />
-			<apex:outputPanel
-				layout="none"
+			<apex:outputPanel layout="none"
 				style="page-break-inside: avoid; page-break-before: auto"
-				rendered="{!Factures_Client__c.IsSent__c == false}"
+				rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == false}"
 			>
 				<!-- Conditions particulières/ Special conditions -->
-				<apex:outputPanel
-					layout="none"
+				<apex:outputPanel layout="none"
 					style="page-break-inside: avoid; page-break-before: auto"
-					rendered="{!IF(NOT(ISNULL(Factures_Client__c.Conditions_Particuli_res__c)), '', 'none')}"
+					rendered="{!IF(NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__Conditions_Particuli_res__c)), '', 'none')}"
 				>
 					<tr
 						style="
@@ -2279,14 +2017,12 @@
 						"
 					>
 						<td colspan="{!colspan1}" class="borderOff">
-							<apex:outputText
-								style="color: gray; text-transform: uppercase"
-								value="{!$ObjectType.Factures_Client__c.Fields.Conditions_Particuli_res__c.Label}"
+							<apex:outputText style="color: gray; text-transform: uppercase"
+								value="{!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__Conditions_Particuli_res__c.Label}"
 							/>
 							<br />
 
-							<apex:outputText
-								value="{!Factures_Client__c.Conditions_Particuli_res__c}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Conditions_Particuli_res__c}"
 							/>
 
 							<br />
@@ -2296,10 +2032,9 @@
 				</apex:outputPanel>
 
 				<!-- Informations complémentaires/ Additional information -->
-				<apex:outputPanel
-					layout="none"
+				<apex:outputPanel layout="none"
 					style="page-break-inside: avoid; page-break-before: auto"
-					rendered="{!IF(NOT(ISNULL(Factures_Client__c.sofactoapp__emetteur_facture__r.Informations_compl_mentaires__c)), '', 'none')}"
+					rendered="{!IF(NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Informations_compl_mentaires__c)), '', 'none')}"
 				>
 					<tr
 						style="
@@ -2308,13 +2043,11 @@
 						"
 					>
 						<td colspan="{!colspan1}" class="borderOff">
-							<apex:outputText
-								style="color: gray; text-transform: uppercase"
-								value="{!$ObjectType.Raison_Sociale__c.Fields.Informations_compl_mentaires__c.Label}"
+							<apex:outputText style="color: gray; text-transform: uppercase"
+								value="{!$ObjectType.sofactoapp__Raison_Sociale__c.Fields.sofactoapp__Informations_compl_mentaires__c.Label}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Informations_compl_mentaires__c}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Informations_compl_mentaires__c}"
 							/>
 							<br />
 							<br />
@@ -2323,10 +2056,9 @@
 				</apex:outputPanel>
 
 				<!-- Conditions d'escompte/ Discount conditions -->
-				<apex:outputPanel
-					layout="none"
+				<apex:outputPanel layout="none"
 					style="page-break-inside: avoid; page-break-before: auto"
-					rendered="{!IF(NOT(ISNULL(Factures_Client__c.sofactoapp__emetteur_facture__r.ConditionsEscompte__c)), '', 'none')}"
+					rendered="{!IF(NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__ConditionsEscompte__c)), '', 'none')}"
 				>
 					<tr
 						style="
@@ -2335,14 +2067,12 @@
 						"
 					>
 						<td colspan="{!colspan1}" class="borderOff">
-							<apex:outputText
-								style="color: gray; text-transform: uppercase"
-								value="{!$ObjectType.Raison_Sociale__c.Fields.ConditionsEscompte__c.Label}"
+							<apex:outputText style="color: gray; text-transform: uppercase"
+								value="{!$ObjectType.sofactoapp__Raison_Sociale__c.Fields.sofactoapp__ConditionsEscompte__c.Label}"
 							/>
 							<br />
 
-							<apex:outputText
-								value="{!$Label.sofactoapp__conditions_d_escompte}"
+							<apex:outputText value="{!$Label.sofactoapp__conditions_d_escompte}"
 							/>
 
 							<br />
@@ -2353,10 +2083,9 @@
 
 				<!--Pénalités en cas de retard/ Penalties in case of delay-->
 
-				<apex:outputPanel
-					layout="none"
+				<apex:outputPanel layout="none"
 					style="page-break-inside: avoid; page-break-before: auto"
-					rendered="{!IF(NOT(ISNULL(Factures_Client__c.sofactoapp__emetteur_facture__r.P_nalit_s_en_cas_de_retard__c)), '', 'none')}"
+					rendered="{!IF(NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__P_nalit_s_en_cas_de_retard__c)), '', 'none')}"
 				>
 					<tr
 						style="
@@ -2365,13 +2094,11 @@
 						"
 					>
 						<td class="borderOff">
-							<apex:outputText
-								style="color: gray; text-transform: uppercase"
-								value="{!$ObjectType.Raison_Sociale__c.Fields.P_nalit_s_en_cas_de_retard__c.Label}"
+							<apex:outputText style="color: gray; text-transform: uppercase"
+								value="{!$ObjectType.sofactoapp__Raison_Sociale__c.Fields.sofactoapp__P_nalit_s_en_cas_de_retard__c.Label}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!$Label.sofactoapp__P_nalit_s_en_cas_de_retard}"
+							<apex:outputText value="{!$Label.sofactoapp__P_nalit_s_en_cas_de_retard}"
 							/>
 							<br />
 							<br />
@@ -2381,10 +2108,9 @@
 
 				<!--Indemnité forfaitaire/ Lump sum compensation-->
 
-				<apex:outputPanel
-					layout="none"
+				<apex:outputPanel layout="none"
 					style="page-break-inside: avoid; page-break-before: auto"
-					rendered="{!IF(NOT(ISNULL(Factures_Client__c.sofactoapp__emetteur_facture__r.L_indemnit_forfaitaire__c)), '', 'none')}"
+					rendered="{!IF(NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__L_indemnit_forfaitaire__c)), '', 'none')}"
 				>
 					<tr
 						style="
@@ -2393,13 +2119,11 @@
 						"
 					>
 						<td class="borderOff">
-							<apex:outputText
-								style="color: gray; text-transform: uppercase"
-								value="{!$ObjectType.Raison_Sociale__c.Fields.L_indemnit_forfaitaire__c.Label}"
+							<apex:outputText style="color: gray; text-transform: uppercase"
+								value="{!$ObjectType.sofactoapp__Raison_Sociale__c.Fields.sofactoapp__L_indemnit_forfaitaire__c.Label}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.L_indemnit_forfaitaire__c}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__L_indemnit_forfaitaire__c}"
 							/>
 							<br />
 							<br />
@@ -2409,10 +2133,9 @@
 
 				<!--Mention TVA/ VAT information-->
 
-				<apex:outputPanel
-					layout="none"
+				<apex:outputPanel layout="none"
 					style="page-break-inside: avoid; page-break-before: auto"
-					rendered="{!IF(NOT(ISNULL(Factures_Client__c.sofactoapp__emetteur_facture__r.MentionsTVA__c)), '', 'none')}"
+					rendered="{!IF(NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__MentionsTVA__c)), '', 'none')}"
 				>
 					<tr
 						style="
@@ -2421,13 +2144,11 @@
 						"
 					>
 						<td class="borderOff">
-							<apex:outputText
-								style="color: gray; text-transform: uppercase"
-								value="{!$ObjectType.Raison_Sociale__c.Fields.MentionsTVA__c.Label}"
+							<apex:outputText style="color: gray; text-transform: uppercase"
+								value="{!$ObjectType.sofactoapp__Raison_Sociale__c.Fields.sofactoapp__MentionsTVA__c.Label}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.MentionsTVA__c}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__MentionsTVA__c}"
 							/>
 							<br />
 							<br />
@@ -2437,16 +2158,14 @@
 			</apex:outputPanel>
 
 			<!--Bas de page Facture Originale - Duplicata/ Invoice Conditions Original - Duplicate-->
-			<apex:outputPanel
-				style="page-break-inside: avoid; page-break-before: auto"
+			<apex:outputPanel style="page-break-inside: avoid; page-break-before: auto"
 				layout="none"
-				rendered="{!Factures_Client__c.IsSent__c == true}"
+				rendered="{!sofactoapp__Factures_Client__c.sofactoapp__IsSent__c == true}"
 			>
 				<!-- Conditions particulières/ Special conditions -->
-				<apex:outputPanel
-					layout="none"
+				<apex:outputPanel layout="none"
 					style="page-break-inside: avoid; page-break-before: auto"
-					rendered="{!IF(NOT(ISNULL(Factures_Client__c.Conditions_Particuli_res__c)), '', 'none')}"
+					rendered="{!IF(NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__Conditions_Particuli_res__c)), '', 'none')}"
 				>
 					<tr
 						style="
@@ -2455,14 +2174,12 @@
 						"
 					>
 						<td colspan="{!colspan1}" class="borderOff">
-							<apex:outputText
-								style="color: gray; text-transform: uppercase"
-								value="{!$ObjectType.Factures_Client__c.Fields.Conditions_Particuli_res__c.Label}"
+							<apex:outputText style="color: gray; text-transform: uppercase"
+								value="{!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__Conditions_Particuli_res__c.Label}"
 							/>
 							<br />
 
-							<apex:outputText
-								value="{!Factures_Client__c.Conditions_Particuli_res__c}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Conditions_Particuli_res__c}"
 							/>
 
 							<br />
@@ -2472,10 +2189,9 @@
 				</apex:outputPanel>
 
 				<!-- Informations complémentaires/ Additional information -->
-				<apex:outputPanel
-					layout="none"
+				<apex:outputPanel layout="none"
 					style="page-break-inside: avoid; page-break-before: auto"
-					rendered="{!IF(NOT(ISNULL(Factures_Client__c.sofactoapp__emetteur_facture__r.Informations_compl_mentaires__c)), '', 'none')}"
+					rendered="{!IF(NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Informations_compl_mentaires__c)), '', 'none')}"
 				>
 					<tr
 						style="
@@ -2484,13 +2200,11 @@
 						"
 					>
 						<td colspan="{!colspan1}" class="borderOff">
-							<apex:outputText
-								style="color: gray; text-transform: uppercase"
-								value="{!$ObjectType.Raison_Sociale__c.Fields.Informations_compl_mentaires__c.Label}"
+							<apex:outputText style="color: gray; text-transform: uppercase"
+								value="{!$ObjectType.sofactoapp__Raison_Sociale__c.Fields.sofactoapp__Informations_compl_mentaires__c.Label}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Informations_compl_mentaires__c}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Informations_compl_mentaires__c}"
 							/>
 							<br />
 							<br />
@@ -2499,10 +2213,9 @@
 				</apex:outputPanel>
 
 				<!-- Conditions d'escompte/ Discount conditions -->
-				<apex:outputPanel
-					layout="none"
+				<apex:outputPanel layout="none"
 					style="page-break-inside: avoid; page-break-before: auto"
-					rendered="{!IF(NOT(ISNULL(Factures_Client__c.sofactoapp__emetteur_facture__r.ConditionsEscompte__c)), '', 'none')}"
+					rendered="{!IF(NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__ConditionsEscompte__c)), '', 'none')}"
 				>
 					<tr
 						style="
@@ -2511,14 +2224,12 @@
 						"
 					>
 						<td colspan="{!colspan1}" class="borderOff">
-							<apex:outputText
-								style="color: gray; text-transform: uppercase"
-								value="{!$ObjectType.Raison_Sociale__c.Fields.ConditionsEscompte__c.Label}"
+							<apex:outputText style="color: gray; text-transform: uppercase"
+								value="{!$ObjectType.sofactoapp__Raison_Sociale__c.Fields.sofactoapp__ConditionsEscompte__c.Label}"
 							/>
 							<br />
 
-							<apex:outputText
-								value="{!$Label.sofactoapp__conditions_d_escompte}"
+							<apex:outputText value="{!$Label.sofactoapp__conditions_d_escompte}"
 							/>
 
 							<br />
@@ -2529,10 +2240,9 @@
 
 				<!--Pénalités en cas de retard/ Penalties in case of delay-->
 
-				<apex:outputPanel
-					layout="none"
+				<apex:outputPanel layout="none"
 					style="page-break-inside: avoid; page-break-before: auto"
-					rendered="{!IF(NOT(ISNULL(Factures_Client__c.sofactoapp__emetteur_facture__r.P_nalit_s_en_cas_de_retard__c)), '', 'none')}"
+					rendered="{!IF(NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__P_nalit_s_en_cas_de_retard__c)), '', 'none')}"
 				>
 					<tr
 						style="
@@ -2541,13 +2251,11 @@
 						"
 					>
 						<td class="borderOff">
-							<apex:outputText
-								style="color: gray; text-transform: uppercase"
-								value="{!$ObjectType.Raison_Sociale__c.Fields.P_nalit_s_en_cas_de_retard__c.Label}"
+							<apex:outputText style="color: gray; text-transform: uppercase"
+								value="{!$ObjectType.sofactoapp__Raison_Sociale__c.Fields.sofactoapp__P_nalit_s_en_cas_de_retard__c.Label}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!$Label.sofactoapp__P_nalit_s_en_cas_de_retard}"
+							<apex:outputText value="{!$Label.sofactoapp__P_nalit_s_en_cas_de_retard}"
 							/>
 							<br />
 							<br />
@@ -2567,13 +2275,11 @@
 						"
 					>
 						<td class="borderOff">
-							<apex:outputText
-								style="color: gray; text-transform: uppercase"
-								value="{!$ObjectType.Raison_Sociale__c.Fields.L_indemnit_forfaitaire__c.Label}"
+							<apex:outputText style="color: gray; text-transform: uppercase"
+								value="{!$ObjectType.sofactoapp__Raison_Sociale__c.Fields.sofactoapp__L_indemnit_forfaitaire__c.Label}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!Factures_Client__c.RS_L_indemnit_forfaitaire_Emise__c}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__RS_L_indemnit_forfaitaire_Emise__c}"
 							/>
 							<br />
 							<br />
@@ -2582,10 +2288,9 @@
 				</table>
 				<!--Mention TVA/ VAT information-->
 
-				<apex:outputPanel
-					layout="none"
+				<apex:outputPanel layout="none"
 					style="page-break-inside: avoid; page-break-before: auto"
-					rendered="{!IF(NOT(ISNULL(Factures_Client__c.sofactoapp__emetteur_facture__r.MentionsTVA__c)), '', 'none')}"
+					rendered="{!IF(NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__MentionsTVA__c)), '', 'none')}"
 				>
 					<tr
 						style="
@@ -2594,13 +2299,11 @@
 						"
 					>
 						<td class="borderOff">
-							<apex:outputText
-								style="color: gray; text-transform: uppercase"
-								value="{!$ObjectType.Raison_Sociale__c.Fields.MentionsTVA__c.Label}"
+							<apex:outputText style="color: gray; text-transform: uppercase"
+								value="{!$ObjectType.sofactoapp__Raison_Sociale__c.Fields.sofactoapp__MentionsTVA__c.Label}"
 							/>
 							<br />
-							<apex:outputText
-								value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.MentionsTVA__c}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__MentionsTVA__c}"
 							/>
 							<br />
 							<br />
@@ -2612,9 +2315,8 @@
 
 		<!-- Indice/ Index -->
 		<table style="page-break-inside: avoid; page-break-before: auto">
-			<apex:outputPanel
-				layout="none"
-				rendered="{!NOT(ISBLANK(Factures_Client__c.IndiceId__c))}"
+			<apex:outputPanel layout="none"
+				rendered="{!NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__IndiceId__c))}"
 			>
 				<tr>
 					<td
@@ -2627,45 +2329,37 @@
 							color: white;
 						"
 					>
-						<apex:outputText
-							value="{!$Label.sofactoapp__Text_Index_Title}"
+						<apex:outputText value="{!$Label.sofactoapp__Text_Index_Title}"
 						/>
 					</td>
 				</tr>
 				<tr>
 					<td>
-						<apex:outputText
-							value="{!$Label.sofactoapp__Text_Formule_Indice}"
+						<apex:outputText value="{!$Label.sofactoapp__Text_Formule_Indice}"
 						/>
 
 						<br />
-						<apex:outputText
-							value="S0 = {!$Label.sofactoapp__Text_Index} {!Factures_Client__c.sofactoapp__Abonnement__r.sofactoapp__Indice__r.Name} {0,date,dd'/'MM'/'yyyy}"
+						<apex:outputText value="S0 = {!$Label.sofactoapp__Text_Index} {!sofactoapp__Factures_Client__c.sofactoapp__Abonnement__r.sofactoapp__Indice__r.Name} {0,date,dd'/'MM'/'yyyy}"
 						>
-							<apex:param
-								value="{!Factures_Client__c.sofactoapp__Abonnement__r.Date_indice_reference__c}"
+							<apex:param value="{!sofactoapp__Factures_Client__c.sofactoapp__Abonnement__r.sofactoapp__Date_indice_reference__c}"
 							/>
 						</apex:outputText>
 						&nbsp;=&nbsp;
 
 						<apex:outputText value="{0, number, ###.00}">
-							<apex:param
-								value="{!Factures_Client__c.sofactoapp__Abonnement__r.Coefficient_indice_reference__c}"
+							<apex:param value="{!sofactoapp__Factures_Client__c.sofactoapp__Abonnement__r.sofactoapp__Coefficient_indice_reference__c}"
 							/>
 						</apex:outputText>
 
 						<br />
-						<apex:outputText
-							value="S1 = {!$Label.sofactoapp__Text_Index} {!Factures_Client__c.sofactoapp__Abonnement__r.sofactoapp__Indice__r.Name} {0,date,dd'/'MM'/'yyyy}"
+						<apex:outputText value="S1 = {!$Label.sofactoapp__Text_Index} {!sofactoapp__Factures_Client__c.sofactoapp__Abonnement__r.sofactoapp__Indice__r.Name} {0,date,dd'/'MM'/'yyyy}"
 						>
-							<apex:param
-								value="{!Factures_Client__c.Date_indice__c}"
+							<apex:param value="{!sofactoapp__Factures_Client__c.sofactoapp__Date_indice__c}"
 							/>
 						</apex:outputText>
 						&nbsp;=&nbsp;
 						<apex:outputText value="{0, number, ###.00}">
-							<apex:param
-								value="{!Factures_Client__c.Coefficient_indice_date__c}"
+							<apex:param value="{!sofactoapp__Factures_Client__c.sofactoapp__Coefficient_indice_date__c}"
 							/>
 						</apex:outputText>
 					</td>
@@ -2679,8 +2373,7 @@
 
 		<!-- Echéancier / Payment Plan -->
 
-		<apex:outputPanel
-			rendered="{!IF(AND(sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__isDisplayPaymentSchedule__c,
+		<apex:outputPanel rendered="{!IF(AND(sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__isDisplayPaymentSchedule__c,
 		sofactoapp__Factures_Client__c.sofactoapp__Type_de_facture__c<>'Avoir', numPayments >= 1), '', 'none')}"
 		>
 			<!--Entête/ Header-->
@@ -2705,8 +2398,7 @@
 																													   sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c = 'B+ Payments One-shot'),
 																													   '', 'none')}"
 					>
-						<apex:outputText
-							value="{!$Label.sofactoapp__Text_PaymentSchedule}"
+						<apex:outputText value="{!$Label.sofactoapp__Text_PaymentSchedule}"
 						/>
 					</td>
 					<td
@@ -2715,8 +2407,7 @@
 						style="font-size:15px;text-transform:uppercase;background-color:gray;color:white;display:{!IF(OR(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c = 'Stripe',
 																													   sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c = 'B+ Payments One-shot'), 'none', '')}"
 					>
-						<apex:outputText
-							value="{!$Label.sofactoapp__Text_PaymentSchedule}"
+						<apex:outputText value="{!$Label.sofactoapp__Text_PaymentSchedule}"
 						/>
 					</td>
 				</tr>
@@ -2728,8 +2419,7 @@
 						style="font-size:15px;text-transform:uppercase;background-color:gray;color:white;display:{!IF(OR(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c = 'Stripe',
 																													   sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c = 'B+ Payments One-shot'), '', 'none')}"
 					>
-						<apex:outputText
-							value="{!$ObjectType.R_glement__c.Label}"
+						<apex:outputText value="{!$ObjectType.sofactoapp__R_glement__c.Label}"
 						/>
 					</td>
 					<td
@@ -2738,8 +2428,7 @@
 						style="font-size:15px;text-transform:uppercase;background-color:gray;color:white;display:{!IF(OR(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c = 'Stripe',
 																													   sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c = 'B+ Payments One-shot'), 'none', '')}"
 					>
-						<apex:outputText
-							value="{!$ObjectType.R_glement__c.Label}"
+						<apex:outputText value="{!$ObjectType.sofactoapp__R_glement__c.Label}"
 						/>
 					</td>
 				</tr>
@@ -2775,8 +2464,7 @@
 							border-bottom: 0.2px solid black;
 						"
 					>
-						<apex:outputText
-							value="{!$ObjectType.R_glement__c.Fields.Date__c.Label}"
+						<apex:outputText value="{!$ObjectType.sofactoapp__R_glement__c.Fields.sofactoapp__Date__c.Label}"
 						/>
 					</td>
 					<!--Montant HT du règlement/ Amount before tax of the payment-->
@@ -2792,8 +2480,7 @@
 							border-bottom: 0.2px solid black;
 						"
 					>
-						<apex:outputText
-							value="{!$ObjectType.R_glement__c.Fields.AutoAmountBeforeTax__c.Label}"
+						<apex:outputText value="{!$ObjectType.sofactoapp__R_glement__c.Fields.sofactoapp__AutoAmountBeforeTax__c.Label}"
 						/>
 					</td>
 					<!--Montant TVA du règlement/ VAT Amount of the payment-->
@@ -2809,8 +2496,7 @@
 							border-bottom: 0.2px solid black;
 						"
 					>
-						<apex:outputText
-							value="{!$ObjectType.R_glement__c.Fields.AutoVATAmount__c.Label}"
+						<apex:outputText value="{!$ObjectType.sofactoapp__R_glement__c.Fields.sofactoapp__AutoVATAmount__c.Label}"
 						/>
 					</td>
 					<!--Montant TTC du règlement/ Amount after tax of the payment-->
@@ -2826,8 +2512,7 @@
 							border-bottom: 0.2px solid black;
 						"
 					>
-						<apex:outputText
-							value="{!$ObjectType.R_glement__c.Fields.Montant__c.Label}"
+						<apex:outputText value="{!$ObjectType.sofactoapp__R_glement__c.Fields.sofactoapp__Montant__c.Label}"
 						/>
 					</td>
 					<!--Lien de paiement / Payment Link-->
@@ -2835,8 +2520,7 @@
 						width="18%"
 						style="text-align: center;color:gray;text-transform:uppercase;border-left: hidden; border-right: hidden; border-top:hidden; border-bottom:0.2px solid black;display:{!IF(OR(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c = 'Stripe', sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='B+ Payments One-shot'), '', 'none')}"
 					>
-						<apex:outputText
-							value="{!$ObjectType.sofactoapp__R_glement__c.Fields.sofactoapp__clientPaymentPspURL__c.Label}"
+						<apex:outputText value="{!$ObjectType.sofactoapp__R_glement__c.Fields.sofactoapp__clientPaymentPspURL__c.Label}"
 						/>
 					</td>
 				</tr>
@@ -2844,18 +2528,15 @@
 				<!--Lignes d’échéancier de règlement/ Payment plan items-->
 				<apex:variable var="counter" value="{!1}" />
 
-				<apex:repeat
-					value="{!orderedPayments}"
+				<apex:repeat value="{!orderedPayments}"
 					var="orderedPaymentsLigne"
 					id="orderedPaymentsLignes"
 				>
-					<apex:repeat
-						value="{!sofactoapp__Factures_Client__c.R_glements__r}"
+					<apex:repeat value="{!sofactoapp__Factures_Client__c.R_glements__r}"
 						var="paymentLigne"
 						id="paymentLignes"
 					>
-						<apex:outputPanel
-							layout="none"
+						<apex:outputPanel layout="none"
 							rendered="{!paymentLigne.Id == orderedPaymentsLigne}"
 						>
 							<tr
@@ -2868,48 +2549,42 @@
 								<!--Numéro de la ligne/ Line Number-->
 								<td width="10%" style="text-align: center">
 									<apex:outputText value="{!counter}" />
-									<apex:variable
-										var="counter"
+									<apex:variable var="counter"
 										value="{!counter+ 1}"
 									/>
 								</td>
 								<!--Date de règlement/ Payment date-->
 								<td width="18%" style="text-align: center">
-									<apex:outputText
-										value="{0,date,dd'/'MM'/'yyyy}"
+									<apex:outputText value="{0,date,dd'/'MM'/'yyyy}"
 									>
-										<apex:param
-											value="{!paymentLigne.Date__c}"
+										<apex:param value="{!paymentLigne.sofactoapp__Date__c}"
 										/>
 									</apex:outputText>
 								</td>
 								<!--Montant HT du règlement/ Amount before tax of the payment-->
 								<td width="18%" style="text-align: center">
-									<c:CurrencyFormat
-										p_scale="2"
+									<c:CurrencyFormat p_scale="2"
 										p_stripTrailingZeros="2"
-										p_language="{!Factures_Client__c.Langue__c}"
-										p_amount="{!paymentLigne.AutoAmountBeforeTax__c}"
+										p_language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
+										p_amount="{!paymentLigne.sofactoapp__AutoAmountBeforeTax__c}"
 										p_currency="{!IF(hasMultiCurrency = true, invoiceCurrency, '')}"
 									/>
 								</td>
 								<!--Montant TVA du règlement/ VAT Amount of the payment-->
 								<td width="18%" style="text-align: center">
-									<c:CurrencyFormat
-										p_scale="2"
+									<c:CurrencyFormat p_scale="2"
 										p_stripTrailingZeros="2"
-										p_language="{!Factures_Client__c.Langue__c}"
-										p_amount="{!paymentLigne.AutoVATAmount__c}"
+										p_language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
+										p_amount="{!paymentLigne.sofactoapp__AutoVATAmount__c}"
 										p_currency="{!IF(hasMultiCurrency = true, invoiceCurrency, '')}"
 									/>
 								</td>
 								<!--Montant TTC du règlement/ Amount after tax of the payment-->
 								<td width="18%" style="text-align: center">
-									<c:CurrencyFormat
-										p_scale="2"
+									<c:CurrencyFormat p_scale="2"
 										p_stripTrailingZeros="2"
-										p_language="{!Factures_Client__c.Langue__c}"
-										p_amount="{!paymentLigne.Montant__c}"
+										p_language="{!sofactoapp__Factures_Client__c.sofactoapp__Langue__c}"
+										p_amount="{!paymentLigne.sofactoapp__Montant__c}"
 										p_currency="{!IF(hasMultiCurrency = true, invoiceCurrency, '')}"
 									/>
 								</td>
@@ -2918,11 +2593,9 @@
 									width="18%"
 									style="text-align:center;display:{!IF(OR(sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c = 'Stripe', sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c='B+ Payments One-shot'), '', 'none')}"
 								>
-									<apex:outputLink
-										value="{!paymentLigne.sofactoapp__clientPaymentPspURL__c}"
+									<apex:outputLink value="{!paymentLigne.sofactoapp__clientPaymentPspURL__c}"
 									>
-										{!$Label.Text_PaymentLink}</apex:outputLink
-									>
+										{!$Label.sofactoapp__Text_PaymentLink}</apex:outputLink>
 								</td>
 							</tr>
 						</apex:outputPanel>
@@ -2933,9 +2606,8 @@
 
 		<!-- Coordonnées bancaires/ Bank Details -->
 
-		<apex:outputPanel
-			layout="none"
-			rendered="{!Factures_Client__c.Afficher_coordonnees_bancaires__c && OR(NOT(ISBLANK(Factures_Client__c.Autres_coordonnees_bancaires__c)), NOT(ISBLANK(Factures_Client__c.sofactoapp__emetteur_facture__r.Coordonnees_bancaires_par_defaut__c)))}"
+		<apex:outputPanel layout="none"
+			rendered="{!sofactoapp__Factures_Client__c.sofactoapp__Afficher_coordonnees_bancaires__c && OR(NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__Autres_coordonnees_bancaires__c)), NOT(ISBLANK(sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Coordonnees_bancaires_par_defaut__c)))}"
 			style="font-size: 11px"
 		>
 			<br />
@@ -2956,8 +2628,7 @@
 							color: white;
 						"
 					>
-						<apex:outputText
-							value=" {!$Label.sofactoapp__Text_Coordonnees_bancaires}"
+						<apex:outputText value=" {!$Label.sofactoapp__Text_Coordonnees_bancaires}"
 						/>
 					</td>
 				</tr>
@@ -2975,18 +2646,15 @@
 							border-bottom: hidden;
 						"
 					>
-						<apex:outputText
-							value="{!$ObjectType.Coordonnees_bancaires__c.Fields.Domiciliation__c.Label}"
+						<apex:outputText value="{!$ObjectType.sofactoapp__Coordonnees_bancaires__c.Fields.sofactoapp__Domiciliation__c.Label}"
 						/>
 					</td>
 					<td width="30%" class="borderOff">
-						<apex:outputText
-							value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Coordonnees_bancaires_par_defaut__r.Domiciliation__c}"
-							rendered="{!ISNULL(Factures_Client__c.Autres_coordonnees_bancaires__c)}"
+						<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Coordonnees_bancaires_par_defaut__r.sofactoapp__Domiciliation__c}"
+							rendered="{!ISNULL(sofactoapp__Factures_Client__c.sofactoapp__Autres_coordonnees_bancaires__c)}"
 						/>
-						<apex:outputText
-							value="{!Factures_Client__c.sofactoapp__Autres_coordonnees_bancaires__r.Domiciliation__c}"
-							rendered="{!NOT(ISNULL(Factures_Client__c.Autres_coordonnees_bancaires__c))}"
+						<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Autres_coordonnees_bancaires__r.sofactoapp__Domiciliation__c}"
+							rendered="{!NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__Autres_coordonnees_bancaires__c))}"
 						/>
 					</td>
 					<td style="width: 10%">&nbsp;</td>
@@ -3002,27 +2670,21 @@
 							border-bottom: hidden;
 						"
 					>
-						<apex:outputText
-							value="{!$ObjectType.Factures_Client__c.Fields.Delai_paiement__c.Label}"
+						<apex:outputText value="{!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__Delai_paiement__c.Label}"
 						/>
 					</td>
 					<td style="width: 20%" class="alignleft borderOff">
-						<apex:outputPanel
-							rendered="{!IF(Factures_Client__c.Delai_paiement__c !='Délai Personnalisé','','none')}"
+						<apex:outputPanel rendered="{!IF(sofactoapp__Factures_Client__c.sofactoapp__Delai_paiement__c !='Délai Personnalisé','','none')}"
 						>
-							<apex:outputField
-								value="{!Factures_Client__c.Delai_paiement__c}"
+							<apex:outputField value="{!sofactoapp__Factures_Client__c.sofactoapp__Delai_paiement__c}"
 							/>
 						</apex:outputPanel>
 
-						<apex:outputPanel
-							rendered="{!IF(Factures_Client__c.Delai_paiement__c =='Délai Personnalisé','','none')}"
+						<apex:outputPanel rendered="{!IF(sofactoapp__Factures_Client__c.sofactoapp__Delai_paiement__c =='Délai Personnalisé','','none')}"
 						>
-							<apex:outputText
-								value="{!Factures_Client__c.NombreDeJoursDelaiPaiement__c}"
+							<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__NombreDeJoursDelaiPaiement__c}"
 							/>
-							<apex:outputField
-								value="{!Factures_Client__c.MethodeCalculEcheancePaiement__c}"
+							<apex:outputField value="{!sofactoapp__Factures_Client__c.sofactoapp__MethodeCalculEcheancePaiement__c}"
 							/>
 						</apex:outputPanel>
 					</td>
@@ -3040,18 +2702,15 @@
 							border-bottom: hidden;
 						"
 					>
-						<apex:outputText
-							value="{!$ObjectType.Coordonnees_bancaires__c.Fields.IBAN__c.Label}"
+						<apex:outputText value="{!$ObjectType.sofactoapp__Coordonnees_bancaires__c.Fields.sofactoapp__IBAN__c.Label}"
 						/>
 					</td>
 					<td class="borderOff">
-						<apex:outputText
-							value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Coordonnees_bancaires_par_defaut__r.IBAN__c}"
-							rendered="{!ISNULL(Factures_Client__c.Autres_coordonnees_bancaires__c)}"
+						<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Coordonnees_bancaires_par_defaut__r.sofactoapp__IBAN__c}"
+							rendered="{!ISNULL(sofactoapp__Factures_Client__c.sofactoapp__Autres_coordonnees_bancaires__c)}"
 						/>
-						<apex:outputText
-							value="{!Factures_Client__c.sofactoapp__Autres_coordonnees_bancaires__r.IBAN__c}"
-							rendered="{!NOT(ISNULL(Factures_Client__c.Autres_coordonnees_bancaires__c))}"
+						<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Autres_coordonnees_bancaires__r.sofactoapp__IBAN__c}"
+							rendered="{!NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__Autres_coordonnees_bancaires__c))}"
 						/>
 					</td>
 					<td style="width: 10%">&nbsp;</td>
@@ -3068,13 +2727,11 @@
 							border-bottom: hidden;
 						"
 					>
-						<apex:outputText
-							value="{!$ObjectType.Factures_Client__c.Fields.Payment_mode__c.Label}"
+						<apex:outputText value="{!$ObjectType.sofactoapp__Factures_Client__c.Fields.sofactoapp__Payment_mode__c.Label}"
 						/>
 					</td>
 					<td style="width: 20%" class="alignleft borderOff">
-						<apex:outputField
-							value="{!Factures_Client__c.Payment_mode__c}"
+						<apex:outputField value="{!sofactoapp__Factures_Client__c.sofactoapp__Payment_mode__c}"
 						/>
 					</td>
 				</tr>
@@ -3090,18 +2747,15 @@
 							border-bottom: hidden;
 						"
 					>
-						<apex:outputText
-							value="{!$ObjectType.Coordonnees_bancaires__c.Fields.BIC__c.Label}"
+						<apex:outputText value="{!$ObjectType.sofactoapp__Coordonnees_bancaires__c.Fields.sofactoapp__BIC__c.Label}"
 						/>
 					</td>
 					<td class="borderOff">
-						<apex:outputText
-							value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Coordonnees_bancaires_par_defaut__r.BIC__c}"
-							rendered="{!ISNULL(Factures_Client__c.Autres_coordonnees_bancaires__c)}"
+						<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Coordonnees_bancaires_par_defaut__r.sofactoapp__BIC__c}"
+							rendered="{!ISNULL(sofactoapp__Factures_Client__c.sofactoapp__Autres_coordonnees_bancaires__c)}"
 						/>
-						<apex:outputText
-							value="{!Factures_Client__c.sofactoapp__Autres_coordonnees_bancaires__r.BIC__c}"
-							rendered="{!NOT(ISNULL(Factures_Client__c.Autres_coordonnees_bancaires__c))}"
+						<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Autres_coordonnees_bancaires__r.sofactoapp__BIC__c}"
+							rendered="{!NOT(ISNULL(sofactoapp__Factures_Client__c.sofactoapp__Autres_coordonnees_bancaires__c))}"
 						/>
 					</td>
 				</tr>
@@ -3112,112 +2766,85 @@
 			</table>
 		</apex:outputPanel>
 	</div>
-	<apex:outputText
-		value="{!Factures_Client__c.Afficher_pourcentage__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Afficher_pourcentage__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.Afficher_remise__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Afficher_remise__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.RS_Code_NAF_Emise__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__RS_Code_NAF_Emise__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.RS_TVA_intra_Emise__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__RS_TVA_intra_Emise__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.Donnee_Comptable__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.sofactoapp__Donnee_Comptable__r.Pays_facturation__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Pays_facturation__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.Ville_RCS__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Ville_RCS__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.SIREN_NIF__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__SIREN_NIF__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.Lettre_RCS__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Lettre_RCS__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.Afficher_Tableau_Repartition_TVA__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Afficher_Tableau_Repartition_TVA__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Lettre_RCS__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Lettre_RCS__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.sofactoapp__Compte__r.Lettre_RCS__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__Lettre_RCS__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.sofactoapp__Donnee_Comptable__r.Lettre_RCS__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Lettre_RCS__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.sofactoapp__Donnee_Comptable__r.Ville_RCS__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__Ville_RCS__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.sofactoapp__Donnee_Comptable__r.SIREN_NIF__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Donnee_Comptable__r.sofactoapp__SIREN_NIF__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.Ville_RCS__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__Ville_RCS__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.sofactoapp__Compte__r.Ville_RCS__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__Ville_RCS__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.sofactoapp__Compte__r.SIREN_NIF__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Compte__r.sofactoapp__SIREN_NIF__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.APE__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__APE__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.TVA_intra__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__TVA_intra__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.isDisplayPaymentSchedule__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__isDisplayPaymentSchedule__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.isDisplayAccountNumber__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__isDisplayAccountNumber__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.isDisplayAccountOwner__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__isDisplayAccountOwner__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.sofactoapp__emetteur_facture__r.isDisplayOpportunityOwner__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__emetteur_facture__r.sofactoapp__isDisplayOpportunityOwner__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.Montant_remise_lignes__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Montant_remise_lignes__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.Echeancier_reglement__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__Echeancier_reglement__c}"
 		rendered="false"
 	/>
-	<apex:outputText
-		value="{!Factures_Client__c.EcheancierFacturation__c}"
+	<apex:outputText value="{!sofactoapp__Factures_Client__c.sofactoapp__EcheancierFacturation__c}"
 		rendered="false"
 	/>
 </apex:page>
